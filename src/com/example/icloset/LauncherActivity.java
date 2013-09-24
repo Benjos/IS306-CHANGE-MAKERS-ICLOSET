@@ -1,6 +1,5 @@
 package com.example.icloset;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -12,9 +11,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.utilities.BasicUtilities;
 
 public class LauncherActivity extends BaseActivity implements
 		ActionBar.TabListener {
@@ -64,18 +64,8 @@ public class LauncherActivity extends BaseActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+		BasicUtilities.overFlowActionItems(this);
 
-		try {
-			ViewConfiguration config = ViewConfiguration.get(this);
-			Field menuKeyField = ViewConfiguration.class
-					.getDeclaredField("sHasPermanentMenuKey");
-			if (menuKeyField != null) {
-				menuKeyField.setAccessible(true);
-				menuKeyField.setBoolean(config, false);
-			}
-		} catch (Exception ex) {
-			// Ignore
-		}
 	}
 
 	@Override
