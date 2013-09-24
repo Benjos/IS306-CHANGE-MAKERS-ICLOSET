@@ -1,6 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/action_add_event"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_add_event"/>
+    <item
+        android:id="@+id/action_add_item"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_add_item"/>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
