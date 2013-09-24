@@ -81,20 +81,8 @@ public class BaseActivity extends FragmentActivity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Intent intent = new Intent(this, AddItemEnterDetails.class);
-		startActivity(intent);
-		overridePendingTransition(0, 0);
-		if (menuItemLastClicked == R.id.action_add_item
-				&& requestCode == RESULT_OK) {
-			// TODO to implement the storing of the image and set a name for the
-			// image
-			Toast.makeText(this, "Picture taken ", Toast.LENGTH_SHORT).show();
-			// Call the intent to the activity that processes the add item
-
-		} else {
-			Toast.makeText(this, "Picture was not  taken ", Toast.LENGTH_SHORT)
-					.show();
-		}
-
+		
+		// TODO check if the result code is OK and add the bitmap to the 
+		BasicUtilities.redirect(this, AddItemEnterDetails.class);
 	}
 }

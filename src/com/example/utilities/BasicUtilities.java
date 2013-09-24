@@ -67,11 +67,17 @@ public class BasicUtilities {
 		}
 	}
 
+	public static void redirectWithClearTop(Activity activity, Class<?> cls) {
+		Intent intent = new Intent(activity, cls);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		activity.startActivity(intent);
+		activity.overridePendingTransition(0, 0);
+	}
+
 	public static void redirect(Activity activity, Class<?> cls) {
 		Intent intent = new Intent(activity, cls);
 		activity.startActivity(intent);
 		activity.overridePendingTransition(0, 0);
-		activity.finish();
 	}
 
 }
