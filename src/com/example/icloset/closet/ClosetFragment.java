@@ -1,6 +1,7 @@
 package com.example.icloset.closet;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
-import android.widget.TextView;
 
 import com.example.icloset.GridViewFragment;
 import com.example.icloset.R;
@@ -25,7 +25,6 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	public static final String TAB_SHOES = "shoes";
 	public static final String TAB_BAG = "bag";
 	public static final String TAB_ACCESORIES = "accesories";
-
 	private View mRoot;
 	private TabHost mTabHost;
 	private int mCurrentTab;
@@ -38,10 +37,12 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mRoot = inflater.inflate(R.layout.tabs_fragment, null);
+		mRoot = inflater.inflate(R.layout.fragment_closet, null);
 		mTabHost = (TabHost) mRoot.findViewById(android.R.id.tabhost);
 		setupTabs();
+
 		return mRoot;
+
 	}
 
 	@Override
@@ -72,15 +73,22 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
 		Log.e(TAG, "buildTab(): tag=" + tag);
-
-		View indicator = LayoutInflater.from(getActivity()).inflate(
-				R.layout.tab,
-				(ViewGroup) mRoot.findViewById(android.R.id.tabs), false);
-		//((TextView) indicator.findViewById(R.id.text)).setText(labelId);
-		
-
+		Drawable drawable;
+		if (tag.equals(TAB_SHIRT)) {
+			drawable = getResources().getDrawable(R.drawable.shirt_icon);
+		} else if (tag.equals(TAB_PANTS)) {
+			drawable = getResources().getDrawable(R.drawable.pants_icon);
+		} else if (tag.equals(TAB_DRESS)) {
+			drawable = getResources().getDrawable(R.drawable.dress_icon);
+		} else if (tag.equals(TAB_SHOES)) {
+			drawable = getResources().getDrawable(R.drawable.pants_icon);
+		} else if (tag.equals(TAB_BAG)) {
+			drawable = getResources().getDrawable(R.drawable.pants_icon);
+		} else {
+			drawable = getResources().getDrawable(R.drawable.pants_icon);
+		}
 		TabSpec tabSpec = mTabHost.newTabSpec(tag);
-		tabSpec.setIndicator(indicator);
+		tabSpec.setIndicator(null, drawable);
 		tabSpec.setContent(tabContentId);
 		return tabSpec;
 	}
