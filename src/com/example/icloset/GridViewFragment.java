@@ -15,24 +15,29 @@ import android.widget.Toast;
 
 public class GridViewFragment extends Fragment {
 
+	public static String TAG = GridViewFragment.class.getSimpleName();
 	// The type
 
 	public static String TYPE = GridViewFragment.class.getSimpleName()
 			+ " type ";
-	public static String TYPE_SHIRT = GridViewFragment.class.getSimpleName()
-			+ " shirt ";
+	public static final int TYPE_SHIRT = 0;
 
-	public static String TYPE_PANTS = GridViewFragment.class.getSimpleName()
-			+ " pants ";
-	public String type = TYPE_SHIRT;
+	public static final int TYPE_PANTS = 1;
+	public int type = TYPE_SHIRT;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle arguments = getArguments();
+		if (arguments != null) {
+			this.type = arguments.getInt(TYPE);
+
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Bundle arguments = getArguments();
-		if (!(arguments == null || arguments.isEmpty())) {
-			this.type = arguments.getString(TYPE);
-		}
 
 		GridView gridview = (GridView) inflater.inflate(
 				R.layout.fragment_grid_view, null);
@@ -87,10 +92,16 @@ public class GridViewFragment extends Fragment {
 				imageView = (ImageView) convertView;
 			}
 
-			if (TYPE.equals(TYPE_PANTS)) {
-				imageView.setImageResource(R.drawable.pants);
-			} else {
+			// TODO to move this from here to the constructor of the adapter
+			switch (type) {
+			case TYPE_SHIRT:
 				imageView.setImageResource(R.drawable.shirt);
+				break;
+			case TYPE_PANTS:
+				imageView.setImageResource(R.drawable.pants);
+				break;
+			default:
+				break;
 			}
 
 			return imageView;

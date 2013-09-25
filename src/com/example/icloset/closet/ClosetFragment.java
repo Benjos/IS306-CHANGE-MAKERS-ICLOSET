@@ -19,8 +19,12 @@ import com.example.icloset.R;
 public class ClosetFragment extends Fragment implements OnTabChangeListener {
 
 	private static final String TAG = "FragmentTabs";
-	public static final String TAB_WORDS = "words";
-	public static final String TAB_NUMBERS = "numbers";
+	public static final String TAB_SHIRT = "shirt";
+	public static final String TAB_PANTS = "pants";
+	public static final String TAB_DRESS = "dress";
+	public static final String TAB_SHOES = "shoes";
+	public static final String TAB_BAG = "bag";
+	public static final String TAB_ACCESORIES = "accesories";
 
 	private View mRoot;
 	private TabHost mTabHost;
@@ -48,14 +52,22 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 		mTabHost.setOnTabChangedListener(this);
 		mTabHost.setCurrentTab(mCurrentTab);
 		// manually start loading stuff in the first tab
-		updateTab(TAB_WORDS, R.id.tab_1);
+		updateTab(TAB_SHIRT, R.id.tab_1);
 	}
 
 	private void setupTabs() {
 		mTabHost.setup(); // you must call this before adding your tabs!
-		mTabHost.addTab(newTab(TAB_WORDS, R.string.add, R.id.tab_1));
-		mTabHost.addTab(newTab(TAB_NUMBERS, R.string.contentDescription,
+		mTabHost.addTab(newTab(TAB_SHIRT, R.string.add, R.id.tab_1));
+		mTabHost.addTab(newTab(TAB_PANTS, R.string.contentDescription,
 				R.id.tab_2));
+		mTabHost.addTab(newTab(TAB_DRESS, R.string.contentDescription,
+				R.id.tab_3));
+		mTabHost.addTab(newTab(TAB_SHOES, R.string.contentDescription,
+				R.id.tab_4));
+		mTabHost.addTab(newTab(TAB_BAG, R.string.contentDescription, R.id.tab_5));
+		mTabHost.addTab(newTab(TAB_ACCESORIES, R.string.contentDescription,
+				R.id.tab_6));
+
 	}
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
@@ -64,7 +76,8 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 		View indicator = LayoutInflater.from(getActivity()).inflate(
 				R.layout.tab,
 				(ViewGroup) mRoot.findViewById(android.R.id.tabs), false);
-		((TextView) indicator.findViewById(R.id.text)).setText(labelId);
+		//((TextView) indicator.findViewById(R.id.text)).setText(labelId);
+		
 
 		TabSpec tabSpec = mTabHost.newTabSpec(tag);
 		tabSpec.setIndicator(indicator);
@@ -75,16 +88,38 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	@Override
 	public void onTabChanged(String tabId) {
 		Log.d(TAG, "onTabChanged(): tabId=" + tabId);
-		if (TAB_WORDS.equals(tabId)) {
+		if (TAB_SHIRT.equals(tabId)) {
 			updateTab(tabId, R.id.tab_1);
 			mCurrentTab = 0;
 			return;
 		}
-		if (TAB_NUMBERS.equals(tabId)) {
+		if (TAB_PANTS.equals(tabId)) {
 			updateTab(tabId, R.id.tab_2);
 			mCurrentTab = 1;
 			return;
 		}
+
+		if (TAB_DRESS.equals(tabId)) {
+			updateTab(tabId, R.id.tab_3);
+			mCurrentTab = 2;
+			return;
+		}
+		if (TAB_SHOES.equals(tabId)) {
+			updateTab(tabId, R.id.tab_4);
+			mCurrentTab = 3;
+			return;
+		}
+		if (TAB_BAG.equals(tabId)) {
+			updateTab(tabId, R.id.tab_5);
+			mCurrentTab = 4;
+			return;
+		}
+		if (TAB_ACCESORIES.equals(tabId)) {
+			updateTab(tabId, R.id.tab_6);
+			mCurrentTab = 5;
+			return;
+		}
+
 	}
 
 	private void updateTab(String tabId, int placeholder) {
@@ -92,18 +127,15 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 		if (fm.findFragmentByTag(tabId) == null) {
 			GridViewFragment fragment = new GridViewFragment();
 			Bundle args = new Bundle();
-			if (tabId.equals(TAB_NUMBERS)) {
-				args.putString(GridViewFragment.TYPE,
-						GridViewFragment.TYPE_PANTS);
+			if (tabId.equals(TAB_PANTS)) {
+				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_PANTS);
 			} else {
-				args.putString(GridViewFragment.TYPE,
-						GridViewFragment.TYPE_SHIRT);
+				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHIRT);
 			}
 
 			fragment.setArguments(args);
 
-			fm.beginTransaction()
-					.replace(placeholder, new GridViewFragment(), tabId)
+			fm.beginTransaction().replace(placeholder, fragment, tabId)
 					.commit();
 		}
 	}
