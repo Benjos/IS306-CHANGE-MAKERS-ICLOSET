@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.icloset.closet.ClosetFragment;
 import com.example.utilities.BasicUtilities;
 
 public class LauncherActivity extends BaseActivity implements
@@ -101,6 +102,11 @@ public class LauncherActivity extends BaseActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
+
+			if (position == 0) {
+				Fragment fragment = new ClosetFragment();
+				return fragment;
+			}
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
