@@ -28,7 +28,7 @@
             android:layout_height="250dp"
             android:contentDescription="@string/contentDescription"
             android:scaleType="centerInside"
-            android:src="@drawable/shirt" />
+            android:src="@drawable/test_image_shirt" />
 
         <Button
             android:id="@+id/add"

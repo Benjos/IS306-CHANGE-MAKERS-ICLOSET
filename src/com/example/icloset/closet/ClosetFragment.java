@@ -71,21 +71,27 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 
 	}
 
+	/**
+	 * @param tag
+	 * @param labelId
+	 * @param tabContentId
+	 * @return The place where you change the icons of the tab
+	 */
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
 		Log.e(TAG, "buildTab(): tag=" + tag);
 		Drawable drawable;
 		if (tag.equals(TAB_SHIRT)) {
-			drawable = getResources().getDrawable(R.drawable.shirt_icon);
+			drawable = getResources().getDrawable(R.drawable.icon_shirt);
 		} else if (tag.equals(TAB_PANTS)) {
-			drawable = getResources().getDrawable(R.drawable.pants_icon);
+			drawable = getResources().getDrawable(R.drawable.icon_pants);
 		} else if (tag.equals(TAB_DRESS)) {
-			drawable = getResources().getDrawable(R.drawable.dress_icon);
+			drawable = getResources().getDrawable(R.drawable.icon_dress);
 		} else if (tag.equals(TAB_SHOES)) {
-			drawable = getResources().getDrawable(R.drawable.pants_icon);
+			drawable = getResources().getDrawable(R.drawable.icon_shoes);
 		} else if (tag.equals(TAB_BAG)) {
-			drawable = getResources().getDrawable(R.drawable.pants_icon);
+			drawable = getResources().getDrawable(R.drawable.icon_pants);
 		} else {
-			drawable = getResources().getDrawable(R.drawable.pants_icon);
+			drawable = getResources().getDrawable(R.drawable.icon_pants);
 		}
 		TabSpec tabSpec = mTabHost.newTabSpec(tag);
 		tabSpec.setIndicator(null, drawable);
@@ -130,6 +136,12 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 
 	}
 
+	/**
+	 * @param tabId
+	 * @param placeholder
+	 * 
+	 *            The place where you change the contents of the tab
+	 */
 	private void updateTab(String tabId, int placeholder) {
 		FragmentManager fm = getFragmentManager();
 		if (fm.findFragmentByTag(tabId) == null) {
@@ -137,6 +149,8 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 			Bundle args = new Bundle();
 			if (tabId.equals(TAB_PANTS)) {
 				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_PANTS);
+			} else if (tabId.equals(TAB_SHOES)) {
+				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHOES);
 			} else {
 				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHIRT);
 			}
@@ -147,5 +161,4 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 					.commit();
 		}
 	}
-
 }

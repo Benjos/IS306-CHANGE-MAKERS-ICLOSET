@@ -21,8 +21,12 @@ public class GridViewFragment extends Fragment {
 	public static String TYPE = GridViewFragment.class.getSimpleName()
 			+ " type ";
 	public static final int TYPE_SHIRT = 0;
-
 	public static final int TYPE_PANTS = 1;
+	public static final int TYPE_DRESS = 2;
+	public static final int TYPE_SHOES = 3;
+	public static final int TYPE_BAGS = 4;
+	public static final int TYPE_ACCESSORIES = 5;
+
 	public int type = TYPE_SHIRT;
 
 	@Override
@@ -95,17 +99,27 @@ public class GridViewFragment extends Fragment {
 			// TODO to move this from here to the constructor of the adapter
 			switch (type) {
 			case TYPE_SHIRT:
-				imageView.setImageResource(R.drawable.shirt);
+				imageView.setImageResource(R.drawable.test_image_shirt);
 				break;
 			case TYPE_PANTS:
-				imageView.setImageResource(R.drawable.pants);
+				imageView.setImageResource(R.drawable.test_image_pants);
 				break;
+			case TYPE_DRESS:
+				imageView.setImageResource(R.drawable.icon_dress);
+				break;
+			case TYPE_SHOES:
+				imageView.setImageResource(R.drawable.icon_shoes);
+				break;
+			case TYPE_BAGS:
+				break;
+			case TYPE_ACCESSORIES:
+				break;
+
 			default:
 				break;
 			}
 
 			return imageView;
 		}
-
 	}
 }
