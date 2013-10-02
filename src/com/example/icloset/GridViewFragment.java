@@ -111,8 +111,10 @@ public class GridViewFragment extends Fragment {
 				imageView.setImageResource(R.drawable.icon_shoes);
 				break;
 			case TYPE_BAGS:
+				imageView.setImageResource(R.drawable.icon_bag);
 				break;
 			case TYPE_ACCESSORIES:
+				imageView.setImageResource(R.drawable.icon_accessories);
 				break;
 
 			default:

@@ -89,9 +89,9 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 		} else if (tag.equals(TAB_SHOES)) {
 			drawable = getResources().getDrawable(R.drawable.icon_shoes);
 		} else if (tag.equals(TAB_BAG)) {
-			drawable = getResources().getDrawable(R.drawable.icon_pants);
+			drawable = getResources().getDrawable(R.drawable.icon_bag);
 		} else {
-			drawable = getResources().getDrawable(R.drawable.icon_pants);
+			drawable = getResources().getDrawable(R.drawable.icon_accessories);
 		}
 		TabSpec tabSpec = mTabHost.newTabSpec(tag);
 		tabSpec.setIndicator(null, drawable);
