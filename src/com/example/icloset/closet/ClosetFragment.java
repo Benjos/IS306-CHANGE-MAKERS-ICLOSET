@@ -151,6 +151,13 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_PANTS);
 			} else if (tabId.equals(TAB_SHOES)) {
 				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHOES);
+			} else if (tabId.equals(TAB_ACCESORIES)) {
+				args.putInt(GridViewFragment.TYPE,
+						GridViewFragment.TYPE_ACCESSORIES);
+			} else if (tabId.equals(TAB_DRESS)) {
+				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_DRESS);
+			} else if (tabId.equals(TAB_BAG)) {
+				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_BAGS);
 			} else {
 				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHIRT);
 			}
