@@ -1,19 +1,22 @@
 package com.example.icloset;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.icloset.addItem.AddItemEnterDetails;
 import com.example.utilities.BasicUtilities;
+import com.example.utilities.PhotoUtilities;
 
 /**
  * @author Ben
@@ -24,7 +27,10 @@ import com.example.utilities.BasicUtilities;
 
 public class BaseActivity extends FragmentActivity {
 
+	public static String TAG = BaseActivity.class.getSimpleName();
+
 	int menuItemLastClicked = 0;
+	private String mCurrentPhotoPath = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,21 @@ public class BaseActivity extends FragmentActivity {
 
 	private void dispatchTakePictureIntent(int actionCode) {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+		File f = null;
+		try {
+			f = PhotoUtilities.setUpPhotoFile(this);
+			mCurrentPhotoPath = f.getAbsolutePath();
+			Log.e(TAG, " THe current phtoto path before dispatch : "
+					+ mCurrentPhotoPath);
+			takePictureIntent
+					.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+		} catch (IOException e) {
+			Log.v(TAG, "Catch exception: " + " Dispatch Take picture Intent\n"
+					+ e.getMessage());
+			f = null;
+			mCurrentPhotoPath = null;
+		}
 		startActivityForResult(takePictureIntent, actionCode);
 	}
 
@@ -86,30 +107,41 @@ public class BaseActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
-
 		if (resultCode == RESULT_OK) {
-
-			// Get the image and store in the memory.
-
-//			File storageDir = new File(
-//					Environment
-//							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-//					getAlbumName());
-
-			// Get the bitmap image to be passed to the Add item page
-			Bundle extras = intent.getExtras();
-			Bitmap mImageBitmap = (Bitmap) extras.get("data");
-			Intent addItemIntent = new Intent(this, AddItemEnterDetails.class);
-			addItemIntent.putExtra("bitmap", mImageBitmap);
-			startActivity(addItemIntent);
-			this.overridePendingTransition(0, 0);
-			this.finish();
-
+			if (mCurrentPhotoPath != null) {
+				Intent addItemIntent = new Intent(this,
+						AddItemEnterDetails.class);
+				addItemIntent.putExtra("path", mCurrentPhotoPath);
+				startActivity(addItemIntent);
+				this.finish();
+				mCurrentPhotoPath = null;
+			} else {
+				Toast.makeText(this, " Image was not taken", Toast.LENGTH_LONG)
+						.show();
+				Log.e(TAG, "mCurrentPhoto is null");
+			}
 		} else {
 			Toast.makeText(this, "Image was not taken", Toast.LENGTH_LONG)
 					.show();
+			Log.e(TAG, "result code is not ok");
 		}
-		// TODO check if the result code is OK and add the bitmap to the
+
+	}
+
+	/**
+	 * Coded to handle the orientation changes, this is important
+	 */
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString("path", mCurrentPhotoPath);
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		mCurrentPhotoPath = savedInstanceState.getString("path");
 
 	}
 }

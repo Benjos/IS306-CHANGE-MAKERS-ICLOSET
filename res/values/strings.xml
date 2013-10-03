@@ -9,5 +9,9 @@
     <string name="title_section1">Closet</string>
     <string name="title_section2">Events</string>
     <string name="contentDescription">content</string>
+    <string name="album_name">iCloset</string>
+    <string name="title_activity_ben_test_data_base_access">BenTestDataBaseAccess</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_ben_test_db">BenTestDB</string>
 
 </resources>
