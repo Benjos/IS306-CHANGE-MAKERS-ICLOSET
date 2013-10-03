@@ -91,10 +91,10 @@ public class BaseActivity extends FragmentActivity {
 
 			// Get the image and store in the memory.
 
-			File storageDir = new File(
-					Environment
-							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-					getAlbumName());
+//			File storageDir = new File(
+//					Environment
+//							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+//					getAlbumName());
 
 			// Get the bitmap image to be passed to the Add item page
 			Bundle extras = intent.getExtras();
