@@ -12,9 +12,9 @@
             android:id="@+id/add_item_enter_details_image"
             android:layout_width="fill_parent"
             android:layout_height="250dp"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/contentDescription"
-            android:scaleType="centerCrop"
-            android:src="@drawable/test_image_shirt" />
+            android:scaleType="fitXY" />
 
         <Spinner
             android:id="@+id/add_item_enter_details_spinner"

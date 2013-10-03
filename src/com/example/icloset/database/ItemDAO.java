@@ -36,12 +36,10 @@ public class ItemDAO {
 	 *            must be something in the category table
 	 * @return
 	 */
-	public Item create(String path, String description, long categoryId) {
+	public Item create(String path, String description, String category) {
 		ContentValues values = new ContentValues();
-		values.put(DBHelper.ITEM_ID, categoryId);
-		if (description != null) {
-			values.put(DBHelper.ITEM_DESCRIPTION, description);
-		}
+		values.put(DBHelper.CATEGORY, category);
+		values.put(DBHelper.ITEM_DESCRIPTION, description);
 		values.put(DBHelper.ITEM_PATH, path);
 		long insertId = database.insert(DBHelper.ITEM_TABLE, null, values);
 		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null,
@@ -55,8 +53,8 @@ public class ItemDAO {
 	public void delete(Item item) {
 		long id = item.id;
 		System.out.println("Category deleted with id: " + id);
-		database.delete(DBHelper.ITEM_TABLE, DBHelper.CATEGORY_ID + " = "
-				+ id, null);
+		database.delete(DBHelper.ITEM_TABLE, DBHelper.ITEM_ID + " = " + id,
+				null);
 	}
 
 	public List<Item> getAll() {
@@ -80,8 +78,8 @@ public class ItemDAO {
 		Item item = new Item();
 		item.id = cursor.getLong(0);
 		item.path = cursor.getString(1);
-//		item.description = cursor.getString(2);
-//		item.categoryId = cursor.getLong(3);
+		item.description = cursor.getString(2);
+		item.category = cursor.getString(3);
 		return item;
 	}
 }

@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.example.icloset.R;
@@ -25,6 +26,7 @@ public class PhotoUtilities {
 	public static final String CAMERA_DIR = "/DCIM/";
 	public static final String JPEG_FILE_PREFIX = "IMG_";
 	public static final String JPEG_FILE_SUFFIX = ".jpg";
+	public static final String TAG = PhotoUtilities.class.getSimpleName();
 
 	private static File getAlbumDir(Context context) {
 		File storageDir = null;
@@ -91,33 +93,55 @@ public class PhotoUtilities {
 	 * @param photoPath
 	 *            Pass the imageView and the image URL as a string
 	 */
-	public static void setPic(ImageView mImageView, String photoPath) {
+	public static void setPic(ImageView mImageView, String photoPath,
+			int reqWidth, int reqHeight) {
 
 		/* There isn't enough memory to open up more than a couple camera photos */
 		/* So pre-scale the target bitmap into which the file is decoded */
 		/* Get the size of the ImageView */
-		int targetW = mImageView.getWidth();
-		int targetH = mImageView.getHeight();
 		/* Get the size of the image */
+
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 		bmOptions.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(photoPath, bmOptions);
-		int photoW = bmOptions.outWidth;
-		int photoH = bmOptions.outHeight;
 
-		/* Figure out which way needs to be reduced less */
-		int scaleFactor = 1;
-		if ((targetW > 0) || (targetH > 0)) {
-			scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-		}
 		/* Set bitmap options to scale the image decode target */
 		bmOptions.inJustDecodeBounds = false;
-		bmOptions.inSampleSize = scaleFactor;
+
+		bmOptions.inSampleSize = calculateInSampleSize(bmOptions, reqWidth,
+				reqHeight);
 		bmOptions.inPurgeable = true;
 		/* Decode the JPEG file into a Bitmap */
 		Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 		/* Associate the Bitmap to the ImageView */
 		mImageView.setImageBitmap(bitmap);
+	}
+
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+			int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+			// This is because sometimes you might need to set the imageView as
+			// fill_parent for the width
+
+			// Calculate ratios of height and width to requested height and
+			// width
+			final int heightRatio = Math.round((float) height
+					/ (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+			// Choose the smallest ratio as inSampleSize value, this will
+			// guarantee
+			// a final image with both dimensions larger than or equal to the
+			// requested height and width.
+			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+		}
+
+		return inSampleSize;
 	}
 
 	/**

@@ -53,7 +53,7 @@ public class BaseActivity extends FragmentActivity {
 		case R.id.action_add_item:
 			if (BasicUtilities.isIntentAvailable(this,
 					MediaStore.ACTION_IMAGE_CAPTURE)) {
-				dispatchTakePictureIntent(1);
+				dispatchTakePictureIntent(0);
 			} else {
 				// TODO Need to have my own camera view
 			}

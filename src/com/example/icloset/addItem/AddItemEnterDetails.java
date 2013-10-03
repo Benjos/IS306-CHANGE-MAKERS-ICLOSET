@@ -1,6 +1,6 @@
 package com.example.icloset.addItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +20,7 @@ import android.widget.Toast;
 import com.example.icloset.BaseActivity;
 import com.example.icloset.LauncherActivity;
 import com.example.icloset.R;
-import com.example.icloset.database.CategoriesDAO;
 import com.example.icloset.database.ItemDAO;
-import com.example.icloset.model.Category;
 import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
 
@@ -30,23 +28,21 @@ public class AddItemEnterDetails extends BaseActivity {
 
 	ImageView iv;
 	EditText et;
-	Category currentCategory;
+	String currentCategory;
 	String path = null;
-	CategoriesDAO categoriesDAO;
 	Spinner spinner;
-	ArrayAdapter<Category> adapter;
-	List<Category> categories;
+	ArrayAdapter<String> adapter;
+	ArrayList<String> categories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_item_enter_details);
-		categoriesDAO = new CategoriesDAO(this);
 		iv = (ImageView) findViewById(R.id.add_item_enter_details_image);
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		path = bundle.getString("path");
-		PhotoUtilities.setPic(iv, path);
+		PhotoUtilities.setPic(iv, path, 200,200);
 		// PhotoUtilities.galleryAddPic(this, path);
 		et = (EditText) findViewById(R.id.add_item_enter_details_description);
 
@@ -66,12 +62,14 @@ public class AddItemEnterDetails extends BaseActivity {
 	protected void onResume() {
 		super.onResume();
 		spinner = (Spinner) findViewById(R.id.add_item_enter_details_spinner);
-		categoriesDAO.open();
 		if (categories == null) {
-			categories = categoriesDAO.getAllCategorys();
+			categories = new ArrayList<String>();
+			categories.add("Shirt");
+			categories.add("Pants");
+
 		}
-		currentCategory = categories.get(2);
-		adapter = new ArrayAdapter<Category>(this,
+		currentCategory = categories.get(1);
+		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, categories);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
@@ -81,8 +79,6 @@ public class AddItemEnterDetails extends BaseActivity {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				currentCategory = categories.get(position);
-				Toast.makeText(AddItemEnterDetails.this,
-						"currentCategory.name", Toast.LENGTH_LONG).show();
 
 			}
 
@@ -92,12 +88,6 @@ public class AddItemEnterDetails extends BaseActivity {
 			}
 		});
 
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		categoriesDAO.close();
 	}
 
 	@Override
@@ -127,7 +117,7 @@ public class AddItemEnterDetails extends BaseActivity {
 		// add the item to the database
 		ItemDAO itemDAO = new ItemDAO(this);
 		itemDAO.open();
-		itemDAO.create(path, description, currentCategory.id);
+		itemDAO.create(path, description, currentCategory);
 		itemDAO.close();
 
 		return true;

@@ -16,7 +16,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.icloset.database.CategoriesDAO;
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
 import com.example.utilities.PhotoUtilities;
@@ -107,39 +106,15 @@ public class GridViewFragment extends Fragment {
 			if (convertView == null) { // if it's not recycled, initialize some
 										// attributes
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				imageView.setPadding(8, 8, 8, 8);
+				imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+				imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+				imageView.setPadding(1, 1, 1, 1);
 			} else {
 				imageView = (ImageView) convertView;
 			}
 
-			// switch (type) {
-			// case TYPE_SHIRT:
-			//
-			// imageView.setImageResource(R.drawable.test_image_shirt);
-			// break;
-			// case TYPE_PANTS:
-			// imageView.setImageResource(R.drawable.test_image_pants);
-			// break;
-			// case TYPE_DRESS:
-			// imageView.setImageResource(R.drawable.test_image_dress);
-			// break;
-			// case TYPE_SHOES:
-			// imageView.setImageResource(R.drawable.test_image_shoes);
-			// break;
-			// case TYPE_BAGS:
-			// imageView.setImageResource(R.drawable.test_image_bags);
-			// break;
-			// case TYPE_ACCESSORIES:
-			// imageView.setImageResource(R.drawable.test_image_accessories);
-			// break;
-			//
-			// default:
-			// break;
-			// }
 			String path = items.get(position).path;
-			PhotoUtilities.setPic(imageView, path);
+			PhotoUtilities.setPic(imageView, path, 100, 100);
 			return imageView;
 		}
 	}
