@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
+import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
 
 public class GridViewFragment extends Fragment {
@@ -58,8 +59,8 @@ public class GridViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		gridview = (GridView) inflater.inflate(R.layout.fragment_grid_view,
-				null);
+		View view = inflater.inflate(R.layout.fragment_grid_view, null);
+		gridview = (GridView) view.findViewById(R.id.gridview);
 		adapter = new ImageAdapter(getActivity());
 		gridview.setAdapter(adapter);
 
@@ -76,7 +77,7 @@ public class GridViewFragment extends Fragment {
 			}
 		});
 
-		return gridview;
+		return view;
 	}
 
 	public class ImageAdapter extends BaseAdapter {
@@ -102,13 +103,18 @@ public class GridViewFragment extends Fragment {
 
 		// create a new ImageView for each item referenced by the Adapter
 		public View getView(int position, View convertView, ViewGroup parent) {
+
 			ImageView imageView;
 			if (convertView == null) { // if it's not recycled, initialize some
 										// attributes
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+				int size = BasicUtilities.convertDpToPx(getActivity(), 100);
+				imageView
+						.setLayoutParams(new GridView.LayoutParams(size, size));
 				imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-				imageView.setPadding(1, 1, 1, 1);
+				imageView.setPadding(10, 10,10, 10);
+				imageView.setBackgroundColor(getResources().getColor(
+						R.color.black));
 			} else {
 				imageView = (ImageView) convertView;
 			}

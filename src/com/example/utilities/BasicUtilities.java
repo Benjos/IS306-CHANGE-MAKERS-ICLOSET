@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.ViewConfiguration;
 
 public class BasicUtilities {
@@ -80,6 +82,12 @@ public class BasicUtilities {
 		activity.overridePendingTransition(0, 0);
 	}
 
-	
+	public static int convertDpToPx(Context context, int dp) {
+		Resources r = context.getResources();
+		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+				r.getDisplayMetrics());
+		return (int) px;
+
+	}
 
 }
