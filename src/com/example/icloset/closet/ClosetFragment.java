@@ -28,6 +28,7 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	private View mRoot;
 	private TabHost mTabHost;
 	private int mCurrentTab;
+	GridViewFragment gridViewFragment;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -144,28 +145,53 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	 */
 	private void updateTab(String tabId, int placeholder) {
 		FragmentManager fm = getFragmentManager();
-		if (fm.findFragmentByTag(tabId) == null) {
-			GridViewFragment fragment = new GridViewFragment();
-			Bundle args = new Bundle();
-			if (tabId.equals(TAB_PANTS)) {
-				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_PANTS);
-			} else if (tabId.equals(TAB_SHOES)) {
-				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHOES);
-			} else if (tabId.equals(TAB_ACCESORIES)) {
-				args.putInt(GridViewFragment.TYPE,
-						GridViewFragment.TYPE_ACCESSORIES);
-			} else if (tabId.equals(TAB_DRESS)) {
-				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_DRESS);
-			} else if (tabId.equals(TAB_BAG)) {
-				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_BAGS);
-			} else {
-				args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHIRT);
-			}
-
-			fragment.setArguments(args);
-
-			fm.beginTransaction().replace(placeholder, fragment, tabId)
-					.commit();
+		if (gridViewFragment != null) {
+			// remove the previous existing fragment from the memory
+			fm.popBackStack();
 		}
+		gridViewFragment = new GridViewFragment();
+		Bundle args = new Bundle();
+		if (tabId.equals(TAB_PANTS)) {
+			args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_PANTS);
+		} else if (tabId.equals(TAB_SHOES)) {
+			args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHOES);
+		} else if (tabId.equals(TAB_ACCESORIES)) {
+			args.putInt(GridViewFragment.TYPE,
+					GridViewFragment.TYPE_ACCESSORIES);
+		} else if (tabId.equals(TAB_DRESS)) {
+			args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_DRESS);
+		} else if (tabId.equals(TAB_BAG)) {
+			args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_BAGS);
+		} else {
+			args.putInt(GridViewFragment.TYPE, GridViewFragment.TYPE_SHIRT);
+		}
+		gridViewFragment.setArguments(args);
+
+		// } else {
+		// // if the fragment already exists then just change the contents
+		// if (tabId.equals(TAB_PANTS)) {
+		// gridViewFragment.type = GridViewFragment.TYPE_PANTS;
+		// gridViewFragment.adapter.notifyDataSetChanged();
+		//
+		// } else if (tabId.equals(TAB_SHOES)) {
+		// gridViewFragment.type = GridViewFragment.TYPE_SHOES;
+		// gridViewFragment.adapter.notifyDataSetChanged();
+		// } else if (tabId.equals(TAB_ACCESORIES)) {
+		// gridViewFragment.type = GridViewFragment.TYPE_ACCESSORIES;
+		// gridViewFragment.adapter.notifyDataSetChanged();
+		// } else if (tabId.equals(TAB_DRESS)) {
+		// gridViewFragment.type = GridViewFragment.TYPE_DRESS;
+		// gridViewFragment.adapter.notifyDataSetChanged();
+		// } else if (tabId.equals(TAB_BAG)) {
+		// gridViewFragment.type = GridViewFragment.TYPE_BAGS;
+		// gridViewFragment.adapter.notifyDataSetChanged();
+		// } else {
+		// gridViewFragment.type = GridViewFragment.TYPE_SHIRT;
+		// gridViewFragment.adapter.notifyDataSetChanged();
+		// }
+		//
+		// }
+		fm.beginTransaction().replace(placeholder, gridViewFragment, tabId)
+				.commit();
 	}
 }

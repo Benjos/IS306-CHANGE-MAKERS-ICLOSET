@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.icloset.addItem.AddItemEnterDetails;

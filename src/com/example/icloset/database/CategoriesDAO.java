@@ -1,26 +1,23 @@
-package com.example.icloset.DAO;
+package com.example.icloset.database;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.icloset.database.helpers.CategoriesHelper;
-import com.example.icloset.model.Category;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.icloset.model.Category;
+
 public class CategoriesDAO {
 
-	// Database fields
 	private SQLiteDatabase database;
-	private CategoriesHelper dbHelper;
-	private String[] allColumns = { CategoriesHelper.CATEGORY_ID,
-			CategoriesHelper.CATEGORY_NAME };
+	private DBHelper dbHelper;
 
 	public CategoriesDAO(Context context) {
-		dbHelper = new CategoriesHelper(context);
+		dbHelper = new DBHelper(context);
 	}
 
 	public void open() throws SQLException {
@@ -33,12 +30,12 @@ public class CategoriesDAO {
 
 	public Category createCategory(String category) {
 		ContentValues values = new ContentValues();
-		values.put(CategoriesHelper.CATEGORY_NAME, category);
-		long insertId = database.insert(CategoriesHelper.CATEGORIES, null,
-				values);
-		Cursor cursor = database.query(CategoriesHelper.CATEGORIES, allColumns,
-				CategoriesHelper.CATEGORY_ID + " = " + insertId, null, null,
-				null, null);
+		values.put(DBHelper.CATEGORY_NAME, category);
+		long insertId = database
+				.insert(DBHelper.CATEGORIES_TABLE, null, values);
+		Cursor cursor = database
+				.query(DBHelper.CATEGORIES_TABLE, null, DBHelper.CATEGORY_ID
+						+ " = " + insertId, null, null, null, null);
 		cursor.moveToFirst();
 		Category cat = cursorToCategory(cursor);
 		cursor.close();
@@ -48,15 +45,15 @@ public class CategoriesDAO {
 	public void deleteCategory(Category cat) {
 		long id = cat.id;
 		System.out.println("Category deleted with id: " + id);
-		database.delete(CategoriesHelper.CATEGORIES,
-				CategoriesHelper.CATEGORY_ID + " = " + id, null);
+		database.delete(DBHelper.CATEGORIES_TABLE, DBHelper.CATEGORY_ID + " = "
+				+ id, null);
 	}
 
 	public List<Category> getAllCategorys() {
 		List<Category> categories = new ArrayList<Category>();
 
-		Cursor cursor = database.query(CategoriesHelper.CATEGORIES, allColumns,
-				null, null, null, null, null);
+		Cursor cursor = database.query(DBHelper.CATEGORIES_TABLE, null, null,
+				null, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Category Category = cursorToCategory(cursor);

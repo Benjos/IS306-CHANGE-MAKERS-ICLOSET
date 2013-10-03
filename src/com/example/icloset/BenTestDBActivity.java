@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-import com.example.icloset.DAO.CategoriesDAO;
+import com.example.icloset.database.CategoriesDAO;
 import com.example.icloset.model.Category;
 
-public class BenTestDB extends ListActivity {
+public class BenTestDBActivity extends ListActivity {
 	private CategoriesDAO dao;
 
 	@Override
@@ -36,20 +36,20 @@ public class BenTestDB extends ListActivity {
 	public void onClick(View view) {
 		@SuppressWarnings("unchecked")
 		ArrayAdapter<Category> adapter = (ArrayAdapter<Category>) getListAdapter();
-		Category comment = null;
+		Category cat = null;
 		switch (view.getId()) {
 		case R.id.add:
 			String[] comments = new String[] { "Cool", "Very nice", "Hate it" };
 			int nextInt = new Random().nextInt(3);
 			// Save the new comment to the database
-			comment = dao.createCategory(comments[nextInt]);
-			adapter.add(comment);
+			cat = dao.createCategory(comments[nextInt]);
+			adapter.add(cat);
 			break;
 		case R.id.delete:
 			if (getListAdapter().getCount() > 0) {
-				comment = (Category) getListAdapter().getItem(0);
-				dao.deleteCategory(comment);
-				adapter.remove(comment);
+				cat = (Category) getListAdapter().getItem(0);
+				dao.deleteCategory(cat);
+				adapter.remove(cat);
 			}
 			break;
 		}
