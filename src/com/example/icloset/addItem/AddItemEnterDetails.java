@@ -1,11 +1,14 @@
 package com.example.icloset.addItem;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.icloset.BaseActivity;
 import com.example.icloset.LauncherActivity;
@@ -14,10 +17,18 @@ import com.example.utilities.BasicUtilities;
 
 public class AddItemEnterDetails extends BaseActivity {
 
+	ImageView iv;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_item_enter_details);
+		iv = (ImageView) findViewById(R.id.add_item_enter_details_image);
+		Intent intent = getIntent();
+		Bundle bundle = intent.getExtras();
+		Bitmap bitmap = (Bitmap) bundle.get("bitmap");
+		iv.setImageBitmap(bitmap);
+
 		Button add = (Button) findViewById(R.id.add);
 		add.setOnClickListener(new OnClickListener() {
 

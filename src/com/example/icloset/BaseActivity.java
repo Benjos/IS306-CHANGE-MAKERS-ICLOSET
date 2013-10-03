@@ -1,7 +1,11 @@
 package com.example.icloset;
 
+import java.io.File;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -79,10 +83,33 @@ public class BaseActivity extends FragmentActivity {
 	 * This method is called when the intent is complete
 	 */
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		// TODO check if the result code is OK and add the bitmap to the 
-		BasicUtilities.redirect(this, AddItemEnterDetails.class);
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+
+		if (resultCode == RESULT_OK) {
+
+			// Get the image and store in the memory.
+
+			File storageDir = new File(
+					Environment
+							.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					getAlbumName());
+
+			// Get the bitmap image to be passed to the Add item page
+			Bundle extras = intent.getExtras();
+			Bitmap mImageBitmap = (Bitmap) extras.get("data");
+			Intent addItemIntent = new Intent(this, AddItemEnterDetails.class);
+			addItemIntent.putExtra("bitmap", mImageBitmap);
+			startActivity(addItemIntent);
+			this.overridePendingTransition(0, 0);
+			this.finish();
+
+		} else {
+			Toast.makeText(this, "Image was not taken", Toast.LENGTH_LONG)
+					.show();
+		}
+		// TODO check if the result code is OK and add the bitmap to the
+
 	}
 }

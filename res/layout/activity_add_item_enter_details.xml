@@ -8,6 +8,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
+        <ImageView
+            android:id="@+id/add_item_enter_details_image"
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:contentDescription="@string/contentDescription"
+            android:scaleType="centerCrop"
+            android:src="@drawable/test_image_shirt" />
+
         <Spinner
             android:id="@+id/add_item_enter_details_spinner"
             android:layout_width="match_parent"
@@ -19,16 +27,10 @@
             android:layout_height="wrap_content"
             android:gravity="top|left"
             android:hint="Enter the description here"
+            android:imeOptions="actionGo"
             android:inputType="textMultiLine"
             android:minWidth="200dp"
             android:scrollHorizontally="false" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="250dp"
-            android:contentDescription="@string/contentDescription"
-            android:scaleType="centerInside"
-            android:src="@drawable/test_image_shirt" />
 
         <Button
             android:id="@+id/add"
