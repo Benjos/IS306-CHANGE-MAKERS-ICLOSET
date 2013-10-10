@@ -3,6 +3,7 @@ package com.example.icloset.addItem;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.icloset.BaseActivity;
 import com.example.icloset.LauncherActivity;
@@ -42,7 +42,7 @@ public class AddItemEnterDetails extends BaseActivity {
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		path = bundle.getString("path");
-		PhotoUtilities.setPic(iv, path, 200,200);
+		PhotoUtilities.setPic(iv, path, 200, 200);
 		// PhotoUtilities.galleryAddPic(this, path);
 		et = (EditText) findViewById(R.id.add_item_enter_details_description);
 
@@ -51,8 +51,7 @@ public class AddItemEnterDetails extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				save();
-				BasicUtilities.redirect(AddItemEnterDetails.this,
-						LauncherActivity.class);
+
 			}
 		});
 
@@ -104,23 +103,47 @@ public class AddItemEnterDetails extends BaseActivity {
 		int itemId = item.getItemId();
 		if (itemId == R.id.add) {
 			save();
-			BasicUtilities.redirect(this, LauncherActivity.class);
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	// TODO add the item to the database and store the image url and the options
-	private boolean save() {
-		String description = et.getText().toString();
-		Toast.makeText(this, "Description : " + description, Toast.LENGTH_LONG)
-				.show();
-		// add the item to the database
-		ItemDAO itemDAO = new ItemDAO(this);
-		itemDAO.open();
-		itemDAO.create(path, description, currentCategory);
-		itemDAO.close();
+	private void save() {
 
-		return true;
+		AddItemTask task = new AddItemTask();
+		task.execute();
+
 	}
 
+	public class AddItemTask extends AsyncTask<Void, Void, Boolean> {
+
+		String description;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// Get the description
+			description = et.getText().toString();
+			// TODO Show the loading indicator
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+
+			ItemDAO itemDAO = new ItemDAO(AddItemEnterDetails.this);
+			itemDAO.open();
+			itemDAO.create(path, description, currentCategory);
+			itemDAO.close();
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			BasicUtilities.redirectWithClearTop(AddItemEnterDetails.this,
+					LauncherActivity.class);
+
+		}
+
+	}
 }

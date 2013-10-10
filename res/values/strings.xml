@@ -13,5 +13,6 @@
     <string name="title_activity_ben_test_data_base_access">BenTestDataBaseAccess</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_ben_test_db">BenTestDB</string>
+    <string name="connection_failure">Connection Failure</string>
 
 </resources>

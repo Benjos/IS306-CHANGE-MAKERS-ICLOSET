@@ -16,7 +16,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.example.icloset.R;

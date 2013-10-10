@@ -26,6 +26,9 @@ import com.example.utilities.PhotoUtilities;
 
 public class BaseActivity extends FragmentActivity {
 
+	// IclostApplication app;
+	// BitmapManager bm;
+
 	public static String TAG = BaseActivity.class.getSimpleName();
 
 	int menuItemLastClicked = 0;
@@ -35,6 +38,32 @@ public class BaseActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launcher);
+		// app = (IclostApplication) getApplication();
+		// app.currentActivity = this;
+		// bm = new BitmapManager();
+		// bm.onCreate(this, R.drawable.icon_shirt);
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// bm.onDestroy();
+		// clearReferences();
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// bm.onPause();
+		// clearReferences();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// bm.onResume();
 	}
 
 	@Override
@@ -85,6 +114,7 @@ public class BaseActivity extends FragmentActivity {
 		File f = null;
 		try {
 			f = PhotoUtilities.setUpPhotoFile(this);
+			// TODO to do the stuff in background.
 			mCurrentPhotoPath = f.getAbsolutePath();
 			Log.e(TAG, " THe current phtoto path before dispatch : "
 					+ mCurrentPhotoPath);
@@ -143,4 +173,10 @@ public class BaseActivity extends FragmentActivity {
 		mCurrentPhotoPath = savedInstanceState.getString("path");
 
 	}
+	//
+	// private void clearReferences() {
+	// Activity currActivity = app.currentActivity;
+	// if (currActivity != null && currActivity.equals(this))
+	// app.currentActivity = null;
+	// }
 }

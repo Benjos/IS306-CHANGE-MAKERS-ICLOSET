@@ -1,11 +1,12 @@
 package com.example.icloset;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,8 @@ public class GridViewFragment extends Fragment {
 
 	public ImageAdapter adapter;
 	public GridView gridview;
-	ItemDAO itemDAO;
-	List<Item> items;
+	ItemFetcher asycTask;
+	ArrayList<Item> items;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,43 @@ public class GridViewFragment extends Fragment {
 		if (arguments != null) {
 			this.type = arguments.getInt(TYPE);
 		}
-		itemDAO = new ItemDAO(getActivity());
-		itemDAO.open();
-		items = itemDAO.getAll();
-		Log.e(TAG, "No of items  existing " + items.size());
+		items = new ArrayList<Item>();
+		asycTask = new ItemFetcher();
+		asycTask.execute();
+
+	}
+
+	public class ItemFetcher extends AsyncTask<Void, Void, List<Item>> {
+		ItemDAO itemDAO;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// TODO show a loading indicator
+
+		}
+
+		@Override
+		protected List<Item> doInBackground(Void... params) {
+			itemDAO = new ItemDAO(getActivity());
+			itemDAO.open();
+			// TODO To change the this to retrieve only the specific type of
+			// item that needs to be displayed.
+			items = (ArrayList<Item>) itemDAO.getAll();
+			itemDAO.close();
+
+			return items;
+		}
+
+		@Override
+		protected void onPostExecute(List<Item> result) {
+			super.onPostExecute(result);
+			// TODO remove the loading indicator and show the grid view
+			items = (ArrayList<Item>) result;
+			adapter.notifyDataSetChanged();
+			Toast.makeText(getActivity(), "Loading has completed",
+					Toast.LENGTH_SHORT).show();
+		}
 
 	}
 
@@ -105,14 +139,15 @@ public class GridViewFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			ImageView imageView;
-			if (convertView == null) { // if it's not recycled, initialize some
-										// attributes
+			if (convertView == null) { // if it's not recycled, initialize
+				// some
+				// attributes
 				imageView = new ImageView(mContext);
 				int size = BasicUtilities.convertDpToPx(getActivity(), 100);
 				imageView
 						.setLayoutParams(new GridView.LayoutParams(size, size));
 				imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-				imageView.setPadding(10, 10,10, 10);
+				imageView.setPadding(10, 10, 10, 10);
 				imageView.setBackgroundColor(getResources().getColor(
 						R.color.black));
 			} else {
@@ -121,6 +156,9 @@ public class GridViewFragment extends Fragment {
 
 			String path = items.get(position).path;
 			PhotoUtilities.setPic(imageView, path, 100, 100);
+			// BaseActivity baseActivity = (BaseActivity) getActivity();
+			// BitmapManager bm = baseActivity.bm;
+			// bm.loadImage("file:" + path, imageView);
 			return imageView;
 		}
 	}

@@ -167,30 +167,6 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 		}
 		gridViewFragment.setArguments(args);
 
-		// } else {
-		// // if the fragment already exists then just change the contents
-		// if (tabId.equals(TAB_PANTS)) {
-		// gridViewFragment.type = GridViewFragment.TYPE_PANTS;
-		// gridViewFragment.adapter.notifyDataSetChanged();
-		//
-		// } else if (tabId.equals(TAB_SHOES)) {
-		// gridViewFragment.type = GridViewFragment.TYPE_SHOES;
-		// gridViewFragment.adapter.notifyDataSetChanged();
-		// } else if (tabId.equals(TAB_ACCESORIES)) {
-		// gridViewFragment.type = GridViewFragment.TYPE_ACCESSORIES;
-		// gridViewFragment.adapter.notifyDataSetChanged();
-		// } else if (tabId.equals(TAB_DRESS)) {
-		// gridViewFragment.type = GridViewFragment.TYPE_DRESS;
-		// gridViewFragment.adapter.notifyDataSetChanged();
-		// } else if (tabId.equals(TAB_BAG)) {
-		// gridViewFragment.type = GridViewFragment.TYPE_BAGS;
-		// gridViewFragment.adapter.notifyDataSetChanged();
-		// } else {
-		// gridViewFragment.type = GridViewFragment.TYPE_SHIRT;
-		// gridViewFragment.adapter.notifyDataSetChanged();
-		// }
-		//
-		// }
 		fm.beginTransaction().replace(placeholder, gridViewFragment, tabId)
 				.commit();
 	}
