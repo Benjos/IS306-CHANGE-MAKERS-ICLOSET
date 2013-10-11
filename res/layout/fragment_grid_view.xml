@@ -9,12 +9,16 @@
         android:id="@+id/gridview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#f0f0f0"
+        android:choiceMode="multipleChoiceModal"
+        android:clickable="true"
         android:columnWidth="90dp"
+        android:drawSelectorOnTop="true"
         android:gravity="center"
+       
         android:numColumns="auto_fit"
         android:overScrollMode="never"
         android:smoothScrollbar="true"
+        android:soundEffectsEnabled="true"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
 

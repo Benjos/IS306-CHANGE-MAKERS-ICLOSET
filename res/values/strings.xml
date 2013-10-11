@@ -15,5 +15,6 @@
     <string name="title_activity_ben_test_db">BenTestDB</string>
     <string name="connection_failure">Connection Failure</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
 
 </resources>

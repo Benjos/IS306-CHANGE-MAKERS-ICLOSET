@@ -7,9 +7,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -17,9 +22,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.example.icloset.R;
-import com.example.icloset.R.color;
-import com.example.icloset.R.id;
-import com.example.icloset.R.layout;
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
 import com.example.utilities.BasicUtilities;
@@ -129,8 +131,67 @@ public class GridViewFragment extends Fragment {
 
 		View view = inflater.inflate(R.layout.fragment_grid_view, null);
 		gridview = (GridView) view.findViewById(R.id.gridview);
+
 		adapter = new ImageAdapter(getActivity());
 		gridview.setAdapter(adapter);
+		gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+		gridview.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+
+				return false;
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				// Do nothing
+
+			}
+
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+				mode.setTitle("Select Items");
+				mode.setSubtitle("1 item selected");
+				MenuInflater inflater = mode.getMenuInflater();
+				inflater.inflate(R.menu.context_menu, menu);
+				return true;
+			}
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+				switch (item.getItemId()) {
+				case R.id.delete:
+					// Delete the item
+					mode.finish(); // Action picked, so close the CAB
+					// TODO call the async task to delete the item and to
+					// refresh the view
+
+					return true;
+				default:
+					return false;
+				}
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode,
+					int position, long id, boolean checked) {
+
+				// TODO Auto-generated method stub
+				int selectCount = gridview.getCheckedItemCount();
+				switch (selectCount) {
+				case 1:
+					mode.setSubtitle("1 item selected");
+					break;
+				default:
+					mode.setSubtitle("" + selectCount + " items selected");
+					break;
+				}
+
+			}
+		});
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
@@ -174,6 +235,9 @@ public class GridViewFragment extends Fragment {
 				// some
 				// attributes
 				imageView = new ImageView(mContext);
+				imageView.setFocusable(false);
+				imageView.setClickable(false);
+
 				int size = BasicUtilities
 						.convertDPIntoPixel(100, getActivity());
 				imageView
@@ -194,4 +258,5 @@ public class GridViewFragment extends Fragment {
 			return imageView;
 		}
 	}
+
 }
