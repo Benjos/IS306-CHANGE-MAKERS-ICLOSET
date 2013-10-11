@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.icloset.R;
 import com.example.icloset.database.ItemDAO;
@@ -165,6 +167,7 @@ public class GridViewFragment extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.delete:
 					// Delete the item
+					deleteItems();
 					mode.finish(); // Action picked, so close the CAB
 					// TODO call the async task to delete the item and to
 					// refresh the view
@@ -178,7 +181,6 @@ public class GridViewFragment extends Fragment {
 			@Override
 			public void onItemCheckedStateChanged(ActionMode mode,
 					int position, long id, boolean checked) {
-
 				// TODO Auto-generated method stub
 				int selectCount = gridview.getCheckedItemCount();
 				switch (selectCount) {
@@ -204,6 +206,14 @@ public class GridViewFragment extends Fragment {
 		});
 
 		return view;
+	}
+
+	protected void deleteItems() {
+		long[] checkedItems = gridview.getCheckedItemIds();
+		Toast.makeText(getActivity(),
+				" No of items checked =  " + gridview.getCheckedItemCount(),
+				Toast.LENGTH_LONG).show();
+
 	}
 
 	public class ImageAdapter extends BaseAdapter {
