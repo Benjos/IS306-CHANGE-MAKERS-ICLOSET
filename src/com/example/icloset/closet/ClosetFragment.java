@@ -13,7 +13,6 @@ import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
-import com.example.icloset.GridViewFragment;
 import com.example.icloset.R;
 
 public class ClosetFragment extends Fragment implements OnTabChangeListener {

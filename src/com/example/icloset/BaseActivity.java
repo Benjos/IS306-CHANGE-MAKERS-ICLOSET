@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.icloset.item.AddItemEnterDetails;
+import com.example.icloset.closet.AddItemEnterDetails;
 import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
 

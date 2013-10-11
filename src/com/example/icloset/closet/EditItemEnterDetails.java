@@ -1,4 +1,4 @@
-package com.example.icloset.item;
+package com.example.icloset.closet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.example.icloset.BaseActivity;
 import com.example.icloset.LauncherActivity;
 import com.example.icloset.R;
-import com.example.icloset.closet.ClosetFragment;
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
 import com.example.utilities.BasicUtilities;

@@ -8,11 +8,26 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.example.icloset.model.Item;
+import com.example.icloset.model.Event;
 
 public class EventDAO {
+
+	public static ArrayList<Event> createDummyEvents() {
+		ArrayList<Event> events = new ArrayList<Event>();
+
+		for (int i = 1; i <= 10; i++) {
+			Event event = new Event();
+			event.id = i;
+			event.startTimeDate = " Start time: " + i;
+			event.endTimeDate = " End Time: " + i;
+			event.name = "Event " + i;
+
+			events.add(event);
+		}
+
+		return events;
+	}
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -34,84 +49,62 @@ public class EventDAO {
 	 * @param eventName
 	 * @param startDataTime
 	 *            can be null
-	 * @param categoryId
-	 *            must be something in the category table
-	 * @return
+	 * 
+	 * @return the event that was just created
 	 */
-	public Item create(String eventName, String startDataTime,
+	public Event create(String eventName, String startDataTime,
 			String endDateTime) {
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.EVENT_END_DATE_TIME, endDateTime);
 		values.put(DBHelper.EVENT_START_DATE_TIME, startDataTime);
 		values.put(DBHelper.EVENT_NAME, eventName);
 		long insertId = database.insert(DBHelper.EVENT_TABLE, null, values);
-		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null,
-				DBHelper.ITEM_ID + " = " + insertId, null, null, null, null);
+		Cursor cursor = database.query(DBHelper.EVENT_TABLE, null,
+				DBHelper.EVENT_ID + " = " + insertId, null, null, null, null);
 		cursor.moveToFirst();
-		Item item = convert(cursor);
+		Event event = convert(cursor);
 		cursor.close();
-		return item;
+		return event;
 	}
 
-	public Item updateItem(Item item) {
+	public Event update(Event event) {
 		ContentValues values = new ContentValues();
-		values.put(DBHelper.CATEGORY, item.category);
-		values.put(DBHelper.ITEM_DESCRIPTION, item.description);
-		values.put(DBHelper.ITEM_PATH, item.path);
-		database.update(DBHelper.ITEM_TABLE, values, DBHelper.ITEM_ID + " = "
-				+ item.id, null);
-		return item;
+		values.put(DBHelper.EVENT_END_DATE_TIME, event.endTimeDate);
+		values.put(DBHelper.EVENT_START_DATE_TIME, event.startTimeDate);
+		values.put(DBHelper.EVENT_NAME, event.name);
+		database.update(DBHelper.ITEM_TABLE, values, DBHelper.EVENT_ID + " = "
+				+ event.id, null);
+		return event;
 	}
 
-	public void delete(Item item) {
-		long id = item.id;
-		database.delete(DBHelper.ITEM_TABLE, DBHelper.ITEM_ID + " = " + id,
+	public void delete(Event event) {
+		long id = event.id;
+		database.delete(DBHelper.EVENT_TABLE, DBHelper.EVENT_ID + " = " + id,
 				null);
 	}
 
-	public List<Item> getAll() {
-		List<Item> items = new ArrayList<Item>();
-
+	public List<Event> getAll() {
+		List<Event> events = new ArrayList<Event>();
 		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null, null, null,
 				null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Item item = convert(cursor);
-			items.add(item);
+			Event event = convert(cursor);
+			events.add(event);
 			cursor.moveToNext();
 		}
 		// Make sure to close the cursor
 		cursor.close();
-		return items;
+		return events;
 	}
 
-	public List<Item> getItemInCategory(String category) {
+	private Event convert(Cursor cursor) {
+		Event event = new Event();
+		event.id = cursor.getLong(0);
+		event.startTimeDate = cursor.getString(1);
+		event.endTimeDate = cursor.getString(2);
+		return event;
 
-		List<Item> items = new ArrayList<Item>();
-
-		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null,
-				DBHelper.CATEGORY + "=\"" + category + "\"", null, null, null,
-				null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Item item = convert(cursor);
-			items.add(item);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		Log.e("Item Dao",
-				"No of items for the " + category + " is  " + items.size());
-		return items;
-	}
-
-	private Item convert(Cursor cursor) {
-
-		Item item = new Item();
-		item.id = cursor.getLong(0);
-		item.path = cursor.getString(1);
-		item.description = cursor.getString(2);
-		item.category = cursor.getString(3);
-		return item;
 	}
 
 }

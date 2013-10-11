@@ -1,4 +1,4 @@
-package com.example.icloset;
+package com.example.icloset.closet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.example.icloset.closet.ClosetFragment;
+import com.example.icloset.R;
+import com.example.icloset.R.color;
+import com.example.icloset.R.id;
+import com.example.icloset.R.layout;
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
 import com.example.utilities.BasicUtilities;
@@ -171,7 +174,8 @@ public class GridViewFragment extends Fragment {
 				// some
 				// attributes
 				imageView = new ImageView(mContext);
-				int size = BasicUtilities.convertDpToPx(getActivity(), 100);
+				int size = BasicUtilities
+						.convertDPIntoPixel(100, getActivity());
 				imageView
 						.setLayoutParams(new GridView.LayoutParams(size, size));
 				imageView.setScaleType(ImageView.ScaleType.FIT_XY);

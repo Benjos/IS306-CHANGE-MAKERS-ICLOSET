@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Event implements Serializable {
 
+	public long id;
 	public String startTimeDate;
 	public String endTimeDate;
 	public String name;

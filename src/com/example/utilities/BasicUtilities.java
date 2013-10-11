@@ -82,12 +82,10 @@ public class BasicUtilities {
 		activity.overridePendingTransition(0, 0);
 	}
 
-	public static int convertDpToPx(Context context, int dp) {
-		Resources r = context.getResources();
-		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-				r.getDisplayMetrics());
-		return (int) px;
-
+	public static int convertDPIntoPixel(int dp, Context context) {
+		int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+				dp, context.getResources().getDisplayMetrics());
+		return px;
 	}
 
 }

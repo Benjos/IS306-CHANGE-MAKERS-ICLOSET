@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.icloset.item.AddItemEnterDetails"
+            android:name="com.example.icloset.closet.AddItemEnterDetails"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -38,7 +38,7 @@
             android:label="@string/title_activity_ben_test_db" >
         </activity>
         <activity
-            android:name="com.example.icloset.item.EditItemEnterDetails"
+            android:name="com.example.icloset.closet.EditItemEnterDetails"
             android:label="@string/app_name" >
         </activity>
     </application>

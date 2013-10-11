@@ -1,4 +1,4 @@
-package com.example.icloset.item;
+package com.example.icloset.closet;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,6 @@ import android.widget.Spinner;
 import com.example.icloset.BaseActivity;
 import com.example.icloset.LauncherActivity;
 import com.example.icloset.R;
-import com.example.icloset.closet.ClosetFragment;
 import com.example.icloset.database.ItemDAO;
 import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
