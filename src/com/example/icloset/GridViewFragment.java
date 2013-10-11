@@ -108,6 +108,10 @@ public class GridViewFragment extends Fragment {
 					int position, long id) {
 				Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT)
 						.show();
+
+				EditItemDialogFragment editItemDialogFragment = EditItemDialogFragment
+						.getInstance(items.get(position));
+				editItemDialogFragment.show(getFragmentManager(), "dialog");
 			}
 		});
 

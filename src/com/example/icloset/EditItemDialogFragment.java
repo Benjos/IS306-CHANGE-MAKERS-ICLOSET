@@ -8,14 +8,9 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.icloset.model.Item;
 // add these codes to the place you want the dialog framgment to appear
 
-/**
- * demoteDialogFragment = DemoteDialogFragment.getInstance(event);
- demoteDialogFragment.show(getFragmentManager(), "dialog");
- */
-
-import com.example.icloset.model.Item;
 
 /**
  * @author Ben Always use the getInstanceMethod
@@ -40,6 +35,8 @@ public class EditItemDialogFragment extends DialogFragment {
 		builder.setTitle(item.description);
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = null;
+		
+		
 		builder.setView(view);
 		builder.setPositiveButton("Edit",
 				new DialogInterface.OnClickListener() {
@@ -49,7 +46,7 @@ public class EditItemDialogFragment extends DialogFragment {
 				});
 		builder.setNeutralButton("Delete",
 				new DialogInterface.OnClickListener() {
-
+         
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// Delete the item.
