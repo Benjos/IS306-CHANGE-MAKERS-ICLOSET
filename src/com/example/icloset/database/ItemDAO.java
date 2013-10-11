@@ -8,6 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import com.example.icloset.model.Item;
 
 public class ItemDAO {
@@ -50,9 +52,18 @@ public class ItemDAO {
 		return item;
 	}
 
+	public Item updateItem(Item item) {
+		ContentValues values = new ContentValues();
+		values.put(DBHelper.CATEGORY, item.category);
+		values.put(DBHelper.ITEM_DESCRIPTION, item.description);
+		values.put(DBHelper.ITEM_PATH, item.path);
+		database.update(DBHelper.ITEM_TABLE, values, DBHelper.ITEM_ID + " = "
+				+ item.id, null);
+		return item;
+	}
+
 	public void delete(Item item) {
 		long id = item.id;
-		System.out.println("Category deleted with id: " + id);
 		database.delete(DBHelper.ITEM_TABLE, DBHelper.ITEM_ID + " = " + id,
 				null);
 	}
@@ -73,6 +84,25 @@ public class ItemDAO {
 		return items;
 	}
 
+	public List<Item> getItemInCategory(String category) {
+
+		List<Item> items = new ArrayList<Item>();
+
+		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null,
+				DBHelper.CATEGORY + "=\"" + category + "\"", null, null, null,
+				null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Item item = convert(cursor);
+			items.add(item);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		Log.e("Item Dao",
+				"No of items for the " + category + " is  " + items.size());
+		return items;
+	}
+
 	private Item convert(Cursor cursor) {
 
 		Item item = new Item();
@@ -82,4 +112,5 @@ public class ItemDAO {
 		item.category = cursor.getString(3);
 		return item;
 	}
+
 }

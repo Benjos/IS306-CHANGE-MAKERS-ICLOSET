@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.icloset.addItem.AddItemEnterDetails;
+import com.example.icloset.item.AddItemEnterDetails;
 import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
 
@@ -32,7 +32,7 @@ public class BaseActivity extends FragmentActivity {
 	public static String TAG = BaseActivity.class.getSimpleName();
 
 	int menuItemLastClicked = 0;
-	private String mCurrentPhotoPath = null;
+	protected String mCurrentPhotoPath = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class BaseActivity extends FragmentActivity {
 	 * 
 	 */
 
-	private void dispatchTakePictureIntent(int actionCode) {
+	protected void dispatchTakePictureIntent(int actionCode) {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 		File f = null;
@@ -142,7 +142,7 @@ public class BaseActivity extends FragmentActivity {
 						AddItemEnterDetails.class);
 				addItemIntent.putExtra("path", mCurrentPhotoPath);
 				startActivity(addItemIntent);
-				this.finish();
+				// this.finish();
 				mCurrentPhotoPath = null;
 			} else {
 				Toast.makeText(this, " Image was not taken", Toast.LENGTH_LONG)

@@ -19,16 +19,16 @@ import com.example.icloset.R;
 public class ClosetFragment extends Fragment implements OnTabChangeListener {
 
 	private static final String TAG = "FragmentTabs";
-	public static final String TAB_SHIRT = "shirt";
-	public static final String TAB_PANTS = "pants";
-	public static final String TAB_DRESS = "dress";
-	public static final String TAB_SHOES = "shoes";
-	public static final String TAB_BAG = "bag";
-	public static final String TAB_ACCESORIES = "accesories";
+	public static final String TAB_SHIRT = "Shirts";
+	public static final String TAB_PANTS = "Pants";
+	public static final String TAB_DRESS = "Dress";
+	public static final String TAB_SHOES = "Shoes";
+	public static final String TAB_BAG = "Bag";
+	public static final String TAB_ACCESORIES = "Accesories";
 	private View mRoot;
 	private TabHost mTabHost;
 	private int mCurrentTab;
-	GridViewFragment gridViewFragment;
+	public static GridViewFragment gridViewFragment;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -44,6 +44,11 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 
 		return mRoot;
 
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 	}
 
 	@Override
@@ -79,7 +84,6 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	 * @return The place where you change the icons of the tab
 	 */
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
-		Log.e(TAG, "buildTab(): tag=" + tag);
 		Drawable drawable;
 		if (tag.equals(TAB_SHIRT)) {
 			drawable = getResources().getDrawable(R.drawable.icon_shirt);
@@ -144,6 +148,7 @@ public class ClosetFragment extends Fragment implements OnTabChangeListener {
 	 *            The place where you change the contents of the tab
 	 */
 	private void updateTab(String tabId, int placeholder) {
+
 		FragmentManager fm = getFragmentManager();
 		if (gridViewFragment != null) {
 			// remove the previous existing fragment from the memory

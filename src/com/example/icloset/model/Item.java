@@ -1,11 +1,14 @@
 package com.example.icloset.model;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 
 	public long id;
 	public String path;
 	public String description;
 	public String category;
+
 	public String toString() {
 		return path;
 	}

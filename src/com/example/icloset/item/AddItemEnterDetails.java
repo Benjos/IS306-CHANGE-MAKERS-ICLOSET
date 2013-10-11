@@ -1,4 +1,4 @@
-package com.example.icloset.addItem;
+package com.example.icloset.item;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import com.example.icloset.BaseActivity;
 import com.example.icloset.LauncherActivity;
 import com.example.icloset.R;
+import com.example.icloset.closet.ClosetFragment;
 import com.example.icloset.database.ItemDAO;
 import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
@@ -43,15 +44,12 @@ public class AddItemEnterDetails extends BaseActivity {
 		Bundle bundle = intent.getExtras();
 		path = bundle.getString("path");
 		PhotoUtilities.setPic(iv, path, 200, 200);
-		// PhotoUtilities.galleryAddPic(this, path);
 		et = (EditText) findViewById(R.id.add_item_enter_details_description);
-
 		Button add = (Button) findViewById(R.id.add);
 		add.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				save();
-
 			}
 		});
 
@@ -63,8 +61,12 @@ public class AddItemEnterDetails extends BaseActivity {
 		spinner = (Spinner) findViewById(R.id.add_item_enter_details_spinner);
 		if (categories == null) {
 			categories = new ArrayList<String>();
-			categories.add("Shirt");
-			categories.add("Pants");
+			categories.add(ClosetFragment.TAB_SHIRT);
+			categories.add(ClosetFragment.TAB_PANTS);
+			categories.add(ClosetFragment.TAB_DRESS);
+			categories.add(ClosetFragment.TAB_BAG);
+			categories.add(ClosetFragment.TAB_SHOES);
+			categories.add(ClosetFragment.TAB_ACCESORIES);
 
 		}
 		currentCategory = categories.get(1);
@@ -91,10 +93,8 @@ public class AddItemEnterDetails extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean valueToReturn = false;
-		// valueToReturn = super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.add_item_enter_details_menu, menu);
-		return valueToReturn;
+		return true;
 	}
 
 	@Override
@@ -129,7 +129,6 @@ public class AddItemEnterDetails extends BaseActivity {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-
 			ItemDAO itemDAO = new ItemDAO(AddItemEnterDetails.this);
 			itemDAO.open();
 			itemDAO.create(path, description, currentCategory);
@@ -142,7 +141,6 @@ public class AddItemEnterDetails extends BaseActivity {
 			super.onPostExecute(result);
 			BasicUtilities.redirectWithClearTop(AddItemEnterDetails.this,
 					LauncherActivity.class);
-
 		}
 
 	}

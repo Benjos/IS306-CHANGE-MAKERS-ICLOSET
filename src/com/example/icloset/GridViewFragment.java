@@ -15,8 +15,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.example.icloset.closet.ClosetFragment;
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
 import com.example.utilities.BasicUtilities;
@@ -42,6 +42,8 @@ public class GridViewFragment extends Fragment {
 	ItemFetcher asycTask;
 	ArrayList<Item> items;
 
+	Context context;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,10 +51,15 @@ public class GridViewFragment extends Fragment {
 		if (arguments != null) {
 			this.type = arguments.getInt(TYPE);
 		}
+		this.context = getActivity();
+		updateView();
+
+	}
+
+	public void updateView() {
 		items = new ArrayList<Item>();
 		asycTask = new ItemFetcher();
 		asycTask.execute();
-
 	}
 
 	public class ItemFetcher extends AsyncTask<Void, Void, List<Item>> {
@@ -61,7 +68,6 @@ public class GridViewFragment extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			// TODO show a loading indicator
 
 		}
 
@@ -71,7 +77,33 @@ public class GridViewFragment extends Fragment {
 			itemDAO.open();
 			// TODO To change the this to retrieve only the specific type of
 			// item that needs to be displayed.
-			items = (ArrayList<Item>) itemDAO.getAll();
+			// default value for the category
+			String category = ClosetFragment.TAB_SHIRT;
+			switch (type) {
+			case TYPE_SHIRT:
+				category = ClosetFragment.TAB_SHIRT;
+				break;
+			case TYPE_ACCESSORIES:
+				category = ClosetFragment.TAB_ACCESORIES;
+				break;
+			case TYPE_BAGS:
+				category = ClosetFragment.TAB_BAG;
+				break;
+			case TYPE_DRESS:
+				category = ClosetFragment.TAB_DRESS;
+				break;
+			case TYPE_PANTS:
+				category = ClosetFragment.TAB_PANTS;
+				break;
+			case TYPE_SHOES:
+				category = ClosetFragment.TAB_SHOES;
+				break;
+
+			default:
+				break;
+			}
+
+			items = (ArrayList<Item>) itemDAO.getItemInCategory(category);
 			itemDAO.close();
 
 			return items;
@@ -83,8 +115,7 @@ public class GridViewFragment extends Fragment {
 			// TODO remove the loading indicator and show the grid view
 			items = (ArrayList<Item>) result;
 			adapter.notifyDataSetChanged();
-			Toast.makeText(getActivity(), "Loading has completed",
-					Toast.LENGTH_SHORT).show();
+
 		}
 
 	}
@@ -98,16 +129,9 @@ public class GridViewFragment extends Fragment {
 		adapter = new ImageAdapter(getActivity());
 		gridview.setAdapter(adapter);
 
-		// String[] values = { "a", "b", "c" };
-		//
-		// gridview.setAdapter(new ArrayAdapter(getActivity(),
-		// android.R.layout.simple_list_item_1, values));
-
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT)
-						.show();
 
 				EditItemDialogFragment editItemDialogFragment = EditItemDialogFragment
 						.getInstance(items.get(position));
