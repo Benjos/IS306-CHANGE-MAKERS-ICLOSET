@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.example.icloset.BaseActivity;
 import com.example.icloset.R;
-import com.example.icloset.R.id;
-import com.example.icloset.R.layout;
 import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Item;
 import com.example.utilities.PhotoUtilities;

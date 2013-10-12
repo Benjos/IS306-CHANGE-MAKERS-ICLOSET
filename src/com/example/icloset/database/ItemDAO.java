@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.icloset.model.Item;
@@ -60,6 +61,18 @@ public class ItemDAO {
 		database.update(DBHelper.ITEM_TABLE, values, DBHelper.ITEM_ID + " = "
 				+ item.id, null);
 		return item;
+	}
+
+	public void delete(long[] ids) {
+
+		// Conver the ids in the long[] form to the Long[] form
+		Long[] idsLong = new Long[ids.length];
+		for (int index = 0; index < ids.length; index++) {
+			idsLong[index] = ids[index];
+		}
+		String args = TextUtils.join(", ", idsLong);
+		database.execSQL(String.format("DELETE FROM " + DBHelper.ITEM_TABLE
+				+ " WHERE " + DBHelper.ITEM_ID + " IN (%s);", args));
 	}
 
 	public void delete(Item item) {

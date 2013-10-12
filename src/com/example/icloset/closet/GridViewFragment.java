@@ -3,11 +3,11 @@ package com.example.icloset.closet;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.icloset.R;
 import com.example.icloset.database.ItemDAO;
@@ -209,10 +208,38 @@ public class GridViewFragment extends Fragment {
 	}
 
 	protected void deleteItems() {
-		long[] checkedItems = gridview.getCheckedItemIds();
-		Toast.makeText(getActivity(),
-				" No of items checked =  " + gridview.getCheckedItemCount(),
-				Toast.LENGTH_LONG).show();
+		final long[] checkedItems = gridview.getCheckedItemIds();
+
+		AsyncTask<Void, Void, Void> deleteTask = new AsyncTask<Void, Void, Void>() {
+			ProgressDialog dialog;
+
+			@Override
+			protected void onPreExecute() {
+				dialog = new ProgressDialog(getActivity());
+				dialog.setMessage("Deleting " + checkedItems.length + " items ");
+				dialog.show();
+				super.onPreExecute();
+			}
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				ItemDAO itemDAO = new ItemDAO(getActivity());
+				itemDAO.open();
+				itemDAO.delete(checkedItems);
+				itemDAO.close();
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+				dialog.dismiss();
+				ClosetFragment.gridViewFragment.updateView();
+			}
+
+		};
+
+		deleteTask.execute();
 
 	}
 
@@ -222,6 +249,11 @@ public class GridViewFragment extends Fragment {
 		public ImageAdapter(Context c) {
 			mContext = c;
 
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			return true;
 		}
 
 		public int getCount() {
