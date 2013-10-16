@@ -54,11 +54,11 @@
                 android:text="Company filed trip" />
 
             <ImageView
-                android:id="@+id/list_element_event_dropdown"
+                android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@android:drawable/btn_star" />
+                android:src="@android:drawable/ic_menu_more" />
         </RelativeLayout>
     </LinearLayout>
     <!-- The container that holds all the images -->

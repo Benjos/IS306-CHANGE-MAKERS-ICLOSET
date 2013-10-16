@@ -75,7 +75,7 @@ public class EventDAO {
 		values.put(DBHelper.EVENT_START_DATE_TIME, event.startTimeDate);
 		values.put(DBHelper.EVENT_NAME, event.name);
 		values.put(DBHelper.EVENT_DESCRIPTION, event.description);
-		database.update(DBHelper.ITEM_TABLE, values, DBHelper.EVENT_ID + " = "
+		database.update(DBHelper.EVENT_TABLE, values, DBHelper.EVENT_ID + " = "
 				+ event.id, null);
 		return event;
 	}
@@ -142,6 +142,13 @@ public class EventDAO {
 		// Make sure to close the cursor
 		cursor.close();
 		return items;
+	}
+
+	public void deleteExistingItemsFromEvent(Event event) {
+
+		database.delete(DBHelper.EVENT_ITEM_TABLE, DBHelper.EVENT_ID + " = "
+				+ event.id, null);
+
 	}
 
 }

@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -28,17 +30,19 @@ import com.example.utilities.PhotoUtilities;
 
 public class EventFragment extends Fragment {
 
-	ArrayList<Event> events;
-	ListView listView;
-	EventAdapter adapter;
+	public ArrayList<Event> events;
+	public ListView listView;
+	public EventAdapter adapter;
 	LayoutInflater inflater;
 	ViewHolder holder;
+	public static EventFragment eventFragment;
 	final static int IMAGE_DIMENSION = 120;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		this.inflater = inflater;
+		eventFragment = this;
 		View view = inflater.inflate(R.layout.fragment_event_list_view, null);
 		listView = (ListView) view.findViewById(R.id.fragment_event_list_view);
 		events = new ArrayList<Event>();
@@ -85,6 +89,8 @@ public class EventFragment extends Fragment {
 
 				holder.llImageContainer = (LinearLayout) convertView
 						.findViewById(R.id.list_element_image_containter);
+				holder.ivEditButton = (ImageView) convertView
+						.findViewById(R.id.edit);
 
 				convertView.setTag(holder);
 			} else {
@@ -96,6 +102,21 @@ public class EventFragment extends Fragment {
 			holder.tvTime.setText(event.startTimeDate);
 			holder.tvEventName.setText(event.name);
 			holder.llImageContainer.removeAllViews();
+
+			holder.ivEditButton.setTag(event);
+			holder.ivEditButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Event event = (Event) v.getTag();
+					// pass the event to the edit event activity
+					Intent intent = new Intent(getActivity(),
+							EditEventActivity.class);
+					intent.putExtra("event", event);
+					getActivity().startActivity(intent);
+
+				}
+			});
 
 			int noOfImages = event.items.size();
 
@@ -143,6 +164,7 @@ public class EventFragment extends Fragment {
 		TextView tvDate;
 		TextView tvTime;
 		TextView tvEventName;
+		ImageView ivEditButton;
 		LinearLayout llImageContainer;
 
 	}

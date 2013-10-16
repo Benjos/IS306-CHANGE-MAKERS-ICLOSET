@@ -191,6 +191,7 @@ public class SelectItems extends BaseActivity {
 			}
 			EventDAO eventDAO = new EventDAO(SelectItems.this);
 			eventDAO.open();
+			eventDAO.deleteExistingItemsFromEvent(event);
 			eventDAO.addItemsToEvent(event, itemsToAdd);
 			eventDAO.close();
 			return null;
