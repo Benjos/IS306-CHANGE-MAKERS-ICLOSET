@@ -8,6 +8,7 @@ public class Item implements Serializable {
 	public String path;
 	public String description;
 	public String category;
+	public boolean isChecked = false;
 
 	public String toString() {
 		return path;

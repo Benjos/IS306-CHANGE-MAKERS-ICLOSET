@@ -10,6 +10,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.icloset.model.Event;
+import com.example.icloset.model.Item;
 
 public class EventDAO {
 
@@ -51,12 +52,14 @@ public class EventDAO {
 	 * 
 	 * @return the event that was just created
 	 */
-	public Event create(String eventName, String startDataTime,
-			String endDateTime) {
+	public Event create(String eventName, String desrciption,
+			String startDataTime, String endDateTime) {
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.EVENT_END_DATE_TIME, endDateTime);
 		values.put(DBHelper.EVENT_START_DATE_TIME, startDataTime);
 		values.put(DBHelper.EVENT_NAME, eventName);
+		values.put(DBHelper.EVENT_DESCRIPTION, desrciption);
+
 		long insertId = database.insert(DBHelper.EVENT_TABLE, null, values);
 		Cursor cursor = database.query(DBHelper.EVENT_TABLE, null,
 				DBHelper.EVENT_ID + " = " + insertId, null, null, null, null);
@@ -71,6 +74,7 @@ public class EventDAO {
 		values.put(DBHelper.EVENT_END_DATE_TIME, event.endTimeDate);
 		values.put(DBHelper.EVENT_START_DATE_TIME, event.startTimeDate);
 		values.put(DBHelper.EVENT_NAME, event.name);
+		values.put(DBHelper.EVENT_DESCRIPTION, event.description);
 		database.update(DBHelper.ITEM_TABLE, values, DBHelper.EVENT_ID + " = "
 				+ event.id, null);
 		return event;
@@ -84,7 +88,7 @@ public class EventDAO {
 
 	public List<Event> getAll() {
 		List<Event> events = new ArrayList<Event>();
-		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null, null, null,
+		Cursor cursor = database.query(DBHelper.EVENT_TABLE, null, null, null,
 				null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -100,9 +104,24 @@ public class EventDAO {
 	private Event convert(Cursor cursor) {
 		Event event = new Event();
 		event.id = cursor.getLong(0);
-		event.startTimeDate = cursor.getString(1);
-		event.endTimeDate = cursor.getString(2);
+		event.name = cursor.getString(1);
+		event.description = cursor.getString(2);
+		event.startTimeDate = cursor.getString(3);
+		event.endTimeDate = cursor.getString(4);
 		return event;
+
+	}
+
+	public void addItemsToEvent(Event event, ArrayList<Item> items) {
+
+		ContentValues values = new ContentValues();
+		// For each of the items add a row in the event_item table to keep track
+		// of the items that belong to the event
+		for (Item item : items) {
+			values.put(DBHelper.EVENT_ID, event.id);
+			values.put(DBHelper.ITEM_ID, item.id);
+			database.insert(DBHelper.EVENT_ITEM_TABLE, null, values);
+		}
 
 	}
 

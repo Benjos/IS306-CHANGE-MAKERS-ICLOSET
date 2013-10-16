@@ -1,9 +1,15 @@
 package com.example.icloset.event;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
@@ -15,16 +21,22 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import com.example.icloset.BaseActivity;
 import com.example.icloset.R;
+import com.example.icloset.SelectItems;
+import com.example.icloset.database.EventDAO;
+import com.example.icloset.model.Event;
 
+@SuppressLint("SimpleDateFormat")
 public class CreateEventActivity extends BaseActivity {
 	final static String DATE_PICKER_START = "DATE_PICKER_START";
 	final static String DATE_PICKER_END = "DATE_PICKER_END";
 	final static String TIME_PICKER_START = "TIME_PICKER_START";
 	final static String TIME_PICKER_END = "TIME_PICKER_END";
 
-	public TextView tvTitle;
+	public TextView tvEventName;
 	public TextView tvDescription;
 	public Button buStartDate;
 	public Button buStartTime;
@@ -39,7 +51,7 @@ public class CreateEventActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_event);
 
-		tvTitle = (TextView) findViewById(R.id.create_event_activity_event_name);
+		tvEventName = (TextView) findViewById(R.id.create_event_activity_event_name);
 		tvDescription = (TextView) findViewById(R.id.create_event_activity_description);
 		buStartTime = (Button) findViewById(R.id.create_event_activity_start_time);
 		buEndTime = (Button) findViewById(R.id.create_event_activity_end_time);
@@ -90,8 +102,8 @@ public class CreateEventActivity extends BaseActivity {
 		super.onOptionsItemSelected(item);
 
 		if (item.getItemId() == R.id.next) {
-			// TODO Asynchronous task to add the event to the database
-			// onPostExecute move to the next view
+			EventCreator eventCreator = new EventCreator();
+			eventCreator.execute();
 
 		}
 		return true;
@@ -201,4 +213,68 @@ public class CreateEventActivity extends BaseActivity {
 		}
 	}
 
+	class EventCreator extends AsyncTask<Void, Void, Void> {
+
+		EventDAO eventDAO;
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"dd-MM-yyyy HH:mm:ss");
+
+		String eventName;
+		String description;
+		String startDateTime;
+		String endDateTime;
+		ProgressDialog progressDialog;
+		Event createdEvent;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			eventName = tvEventName.getText().toString();
+			description = tvDescription.getText().toString();
+
+			
+			startDateTime = dateFormat
+					.format(CreateEventActivity.this.startDateTime.getTime());
+			endDateTime = dateFormat
+					.format(CreateEventActivity.this.endDateTime.getTime());
+
+			progressDialog = new ProgressDialog(CreateEventActivity.this);
+			progressDialog.setTitle("Creating event.. Just a moment");
+			progressDialog.show();
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			eventDAO = new EventDAO(CreateEventActivity.this);
+			eventDAO.open();
+			createdEvent = eventDAO.create(eventName, description,
+					startDateTime, endDateTime);
+			eventDAO.close();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+
+			}
+			if (createdEvent == null) {
+				Toast.makeText(CreateEventActivity.this, "Event not created",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Intent intent = new Intent(CreateEventActivity.this,
+						SelectItems.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.putExtra("event", createdEvent);
+				startActivity(intent);
+			}
+
+		}
+
+	}
 }

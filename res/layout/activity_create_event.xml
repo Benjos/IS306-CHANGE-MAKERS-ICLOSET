@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="Event Title" />
+        android:hint="Event name" />
 
     <EditText
         android:id="@+id/create_event_activity_description"

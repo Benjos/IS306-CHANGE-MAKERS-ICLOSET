@@ -6,21 +6,40 @@
 
     <ImageView
         android:id="@+id/select_items_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:contentDescription="@string/contentDescription" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/contentDescription"
+        android:scaleType="fitXY"
+        android:src="@drawable/test_image_bags" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        
-        <TextView 
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <!-- The check box that is not checked by default -->
+
+        <CheckBox
+            android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Worn few "
-            />
-        
+            android:layout_gravity="right"
+            android:checked="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last used all history :12 days ago "
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Used for this event :  Three times "
+            android:textColor="#999999"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>

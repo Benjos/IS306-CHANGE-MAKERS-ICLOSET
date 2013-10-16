@@ -113,7 +113,13 @@ public class PhotoUtilities {
 		/* Decode the JPEG file into a Bitmap */
 		Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 		/* Associate the Bitmap to the ImageView */
-		mImageView.setImageBitmap(bitmap);
+
+		if (bitmap != null ) {
+			mImageView.setImageBitmap(bitmap);
+		} else {
+			Log.e(TAG, "set pic failed bitmap  or  imageView is null");
+		}
+
 	}
 
 	public static int calculateInSampleSize(BitmapFactory.Options options,

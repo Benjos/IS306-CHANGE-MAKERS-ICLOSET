@@ -22,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	public static final String EVENT_ID = "event_id";
 	public static final String EVENT_NAME = "event_name";
+	public static final String EVENT_DESCRIPTION = "event_description";
 	public static final String EVENT_START_DATE_TIME = "event_start_date_time";
 	public static final String EVENT_END_DATE_TIME = "event_end_data_time";
 
@@ -33,8 +34,9 @@ public class DBHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_EVENT = " create table "
 			+ EVENT_TABLE + "(" + EVENT_ID
 			+ " integer primary key autoincrement, " + EVENT_NAME
-			+ " text not null," + EVENT_START_DATE_TIME + " DATETIME, "
-			+ EVENT_END_DATE_TIME + " DATETIME not null " + ");";
+			+ " text not null," + EVENT_DESCRIPTION + " text ,"
+			+ EVENT_START_DATE_TIME + " DATETIME, " + EVENT_END_DATE_TIME
+			+ " DATETIME not null " + ");";
 
 	// The database is not properly impplemented , but is ok
 	private static final String SQL_EVENT_ITEM = " create table "
