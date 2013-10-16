@@ -10,6 +10,6 @@ public class Event implements Serializable {
 	public String description;
 	public String endTimeDate;
 	public String name;
-	ArrayList<Item> items;
+	public ArrayList<Item> items;
 
 }

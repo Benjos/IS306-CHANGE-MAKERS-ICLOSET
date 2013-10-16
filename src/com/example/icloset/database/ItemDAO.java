@@ -97,6 +97,25 @@ public class ItemDAO {
 		return items;
 	}
 
+	/**
+	 * @param id
+	 * @return get a single item
+	 */
+	public Item getItem(Long id) {
+		Item item = new Item();
+		Cursor cursor = database.query(DBHelper.ITEM_TABLE, null,
+				DBHelper.ITEM_ID + " = " + id, null, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			item = convert(cursor);
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+
+		return item;
+	}
+
 	public List<Item> getItemInCategory(String category) {
 
 		List<Item> items = new ArrayList<Item>();

@@ -125,4 +125,23 @@ public class EventDAO {
 
 	}
 
+	/**
+	 * @param event
+	 * @return get the id's of the items that belong to the event
+	 */
+	public ArrayList<Long> getEventItems(Event event) {
+		ArrayList<Long> items = new ArrayList<Long>();
+		Cursor cursor = database.query(DBHelper.EVENT_ITEM_TABLE, null,
+				DBHelper.EVENT_ID + " = " + event.id, null, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			// Get the item id
+			items.add(cursor.getLong(1));
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+		return items;
+	}
+
 }

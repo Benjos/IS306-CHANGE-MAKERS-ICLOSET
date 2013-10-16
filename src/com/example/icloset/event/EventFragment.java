@@ -2,7 +2,9 @@ package com.example.icloset.event;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -18,8 +20,11 @@ import android.widget.TextView;
 
 import com.example.icloset.R;
 import com.example.icloset.database.EventDAO;
+import com.example.icloset.database.ItemDAO;
 import com.example.icloset.model.Event;
+import com.example.icloset.model.Item;
 import com.example.utilities.BasicUtilities;
+import com.example.utilities.PhotoUtilities;
 
 public class EventFragment extends Fragment {
 
@@ -28,6 +33,7 @@ public class EventFragment extends Fragment {
 	EventAdapter adapter;
 	LayoutInflater inflater;
 	ViewHolder holder;
+	final static int IMAGE_DIMENSION = 120;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,10 +41,13 @@ public class EventFragment extends Fragment {
 		this.inflater = inflater;
 		View view = inflater.inflate(R.layout.fragment_event_list_view, null);
 		listView = (ListView) view.findViewById(R.id.fragment_event_list_view);
-		events = EventDAO.createDummyEvents();
+		events = new ArrayList<Event>();
 		adapter = new EventAdapter(getActivity(),
 				R.layout.fragment_event_list_element, events);
 		listView.setAdapter(adapter);
+		EventFetcher eventFetcher = new EventFetcher();
+		eventFetcher.execute();
+
 		return view;
 	}
 
@@ -88,8 +97,12 @@ public class EventFragment extends Fragment {
 			holder.tvEventName.setText(event.name);
 			holder.llImageContainer.removeAllViews();
 
-			int noOfImages = 5;
-			for (int i = 0; i < noOfImages; i++) {
+			int noOfImages = event.items.size();
+
+			int count = 0;
+
+			outer: for (int i = 0; i < noOfImages; i++) {
+
 				LinearLayout dummyLinearLayout = new LinearLayout(getActivity());
 				LinearLayout.LayoutParams params = new LayoutParams(
 						LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -98,16 +111,24 @@ public class EventFragment extends Fragment {
 				dummyLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 				dummyLinearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
-				for (int j = 0; j < 5; j++) {
+				for (int j = 0; j < 2; j++) {
 
 					ImageView iv = new ImageView(getActivity());
 					iv.setLayoutParams(new ViewGroup.LayoutParams(
-							BasicUtilities
-									.convertDPIntoPixel(60, getActivity()),
-							BasicUtilities
-									.convertDPIntoPixel(60, getActivity())));
-					iv.setImageResource(R.drawable.test_image_bags);
+							BasicUtilities.convertDPIntoPixel(IMAGE_DIMENSION,
+									getActivity()), BasicUtilities
+									.convertDPIntoPixel(IMAGE_DIMENSION,
+											getActivity())));
+
+					// iv.setImageResource(R.drawable.test_image_bags);
+					PhotoUtilities.setPic(iv, event.items.get(count).path,
+							IMAGE_DIMENSION, IMAGE_DIMENSION);
 					dummyLinearLayout.addView(iv);
+					++count;
+					if (count >= noOfImages) {
+						holder.llImageContainer.addView(dummyLinearLayout);
+						break outer;
+					}
 
 				}
 				holder.llImageContainer.addView(dummyLinearLayout);
@@ -118,25 +139,63 @@ public class EventFragment extends Fragment {
 		}
 	}
 
-	/**
-	 * ImageView iv = new CircleImageView(getActivity()); iv.setLayoutParams(new
-	 * ViewGroup.LayoutParams(size, size)); String imageUrl =
-	 * i.getPicture_URL(); bm.loadImage(imageUrl, iv);
-	 * inviteeImageContainer.addView(iv);
-	 * 
-	 */
-	/**
-	 * @author Ben
-	 * 
-	 *         The view holder for the list view
-	 * 
-	 */
 	public class ViewHolder {
 		TextView tvDate;
 		TextView tvTime;
 		TextView tvEventName;
 		LinearLayout llImageContainer;
 
+	}
+
+	class EventFetcher extends AsyncTask<Void, Void, ArrayList<Event>> {
+		ProgressDialog progressDialog;
+		Context context;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progressDialog = new ProgressDialog(getActivity());
+			progressDialog.setTitle("Fetching events ..  just a moment... ");
+			progressDialog.show();
+			this.context = getActivity();
+		}
+
+		@Override
+		protected ArrayList<Event> doInBackground(Void... params) {
+			// get the events
+			EventDAO eventDAO = new EventDAO(context);
+			eventDAO.open();
+			events = (ArrayList<Event>) eventDAO.getAll();
+
+			ItemDAO itemDAO = new ItemDAO(context);
+			itemDAO.open();
+
+			for (Event event : events) {
+				event.items = new ArrayList<Item>();
+				ArrayList<Long> itemIds = eventDAO.getEventItems(event);
+				for (Long itemId : itemIds) {
+					Item item = itemDAO.getItem(itemId);
+					// add the item to the items of the event
+					event.items.add(item);
+				}
+			}
+			itemDAO.close();
+			eventDAO.close();
+
+			return events;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Event> result) {
+			super.onPostExecute(result);
+			events = result;
+			adapter.clear();
+			adapter.addAll(events);
+			adapter.notifyDataSetChanged();
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+			}
+		}
 	}
 
 }
