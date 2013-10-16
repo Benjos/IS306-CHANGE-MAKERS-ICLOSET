@@ -25,7 +25,6 @@ public class EventDAO {
 
 			events.add(event);
 		}
-
 		return events;
 	}
 

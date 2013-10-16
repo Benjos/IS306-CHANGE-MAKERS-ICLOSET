@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.icloset.closet.AddItemEnterDetails;
+import com.example.icloset.event.CreateEventActivity;
 import com.example.utilities.BasicUtilities;
 import com.example.utilities.PhotoUtilities;
 
@@ -89,8 +90,10 @@ public class BaseActivity extends FragmentActivity {
 			break;
 
 		case R.id.action_add_event:
-			Toast.makeText(this, " Add event is called", Toast.LENGTH_SHORT)
-					.show();
+			Intent intent = new Intent(this, CreateEventActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			this.startActivity(intent);
+
 			break;
 		case R.id.action_settings:
 			Toast.makeText(this, " Settings is called", Toast.LENGTH_SHORT)

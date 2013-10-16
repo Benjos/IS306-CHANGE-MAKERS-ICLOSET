@@ -41,6 +41,14 @@
             android:name="com.example.icloset.closet.EditItemEnterDetails"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.example.icloset.event.CreateEventActivity"
+            android:label="@string/title_activity_create_event" >
+        </activity>
+        <activity
+            android:name="com.example.icloset.SelectItems"
+            android:label="@string/title_activity_select_items" >
+        </activity>
     </application>
 
 </manifest>

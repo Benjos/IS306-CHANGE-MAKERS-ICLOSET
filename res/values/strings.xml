@@ -16,5 +16,9 @@
     <string name="connection_failure">Connection Failure</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="title_activity_create_event">1. Enter details</string>
+    <string name="next">Next</string>
+    <string name="create">Create</string>
+    <string name="title_activity_select_items">SelectItems</string>
 
 </resources>
