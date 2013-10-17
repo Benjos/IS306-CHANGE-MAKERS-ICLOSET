@@ -232,7 +232,6 @@ public class CreateEventActivity extends BaseActivity {
 			eventName = tvEventName.getText().toString();
 			description = tvDescription.getText().toString();
 
-			
 			startDateTime = dateFormat
 					.format(CreateEventActivity.this.startDateTime.getTime());
 			endDateTime = dateFormat
@@ -271,6 +270,7 @@ public class CreateEventActivity extends BaseActivity {
 						SelectItems.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				intent.putExtra("event", createdEvent);
+				intent.putExtra(SelectItems.MODE, SelectItems.CREATE);
 				startActivity(intent);
 			}
 

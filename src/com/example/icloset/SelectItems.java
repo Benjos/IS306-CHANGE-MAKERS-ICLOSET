@@ -33,6 +33,13 @@ public class SelectItems extends BaseActivity {
 	ArrayList<Item> items;
 	ListView listview;
 	ItemFetcher itemFetcher;
+	String mode;
+
+	public final static String MODE = "mode";
+	public final static int CREATE = 0;
+	public final static int UPDATE = 1;
+
+	public int currentMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,8 @@ public class SelectItems extends BaseActivity {
 		setContentView(R.layout.activity_select_items);
 		Intent intent = getIntent();
 		event = (Event) intent.getSerializableExtra("event");
+		currentMode = intent.getIntExtra(MODE, CREATE);
+
 		items = new ArrayList<Item>();
 		// TODO get all the items
 		adapter = new ItemAdapter(this, R.layout.list_element_choose_items,
@@ -49,12 +58,23 @@ public class SelectItems extends BaseActivity {
 		// Get all the items to be displayed
 		itemFetcher = new ItemFetcher();
 		itemFetcher.execute();
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.select_items, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem menuItem = menu.getItem(0);
+		if (currentMode == UPDATE) {
+			menuItem.setTitle("Update");
+		}
+
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -110,6 +130,11 @@ public class SelectItems extends BaseActivity {
 			});
 
 			Item item = items.get(position);
+			if (item.isChecked) {
+				holder.checkBox.setChecked(true);
+			} else {
+				holder.checkBox.setChecked(false);
+			}
 			holder.checkBox.setTag(item);
 			PhotoUtilities.setPic(holder.imageView, item.path, 150, 150);
 
@@ -149,6 +174,18 @@ public class SelectItems extends BaseActivity {
 			// get all the items
 			items = (ArrayList<Item>) itemDAO.getAll();
 			itemDAO.close();
+			if (currentMode == UPDATE) {
+				// check the existing items
+				for (Item item : items) {
+					for (Item alreadySelectedItem : event.items) {
+						if (item.id == alreadySelectedItem.id) {
+							item.isChecked = true;
+						}
+					}
+				}
+
+			}
+
 			return items;
 		}
 
@@ -191,6 +228,7 @@ public class SelectItems extends BaseActivity {
 			}
 			EventDAO eventDAO = new EventDAO(SelectItems.this);
 			eventDAO.open();
+			// Just delete all the existing items and add the new ones
 			eventDAO.deleteExistingItemsFromEvent(event);
 			eventDAO.addItemsToEvent(event, itemsToAdd);
 			eventDAO.close();

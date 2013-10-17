@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,6 +36,14 @@ public class EventFragment extends Fragment {
 	ViewHolder holder;
 	public static EventFragment eventFragment;
 	final static int IMAGE_DIMENSION = 120;
+	public static EventFragment currentFragment;
+
+	public void updateView() {
+		events = new ArrayList<Event>();
+		EventFetcher eventFetcher = new EventFetcher();
+		eventFetcher.execute();
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +56,8 @@ public class EventFragment extends Fragment {
 		adapter = new EventAdapter(getActivity(),
 				R.layout.fragment_event_list_element, events);
 		listView.setAdapter(adapter);
-		EventFetcher eventFetcher = new EventFetcher();
-		eventFetcher.execute();
+		updateView();
+		currentFragment = this;
 
 		return view;
 	}
@@ -108,12 +115,14 @@ public class EventFragment extends Fragment {
 
 				@Override
 				public void onClick(View v) {
+
+					// Popup to ask if you need to delete or edit the event
 					Event event = (Event) v.getTag();
-					// pass the event to the edit event activity
-					Intent intent = new Intent(getActivity(),
-							EditEventActivity.class);
-					intent.putExtra("event", event);
-					getActivity().startActivity(intent);
+					EditEventDialogFragment editEventDialogFragment = EditEventDialogFragment
+							.getInstance(event);
+
+					editEventDialogFragment
+							.show(getFragmentManager(), "dialog");
 
 				}
 			});

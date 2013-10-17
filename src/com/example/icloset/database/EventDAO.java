@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.icloset.model.Event;
 import com.example.icloset.model.Item;
@@ -32,6 +33,7 @@ public class EventDAO {
 	// Database fields
 	private SQLiteDatabase database;
 	private DBHelper dbHelper;
+	public final static String TAG = EventDAO.class.getSimpleName();
 
 	public EventDAO(Context context) {
 		dbHelper = new DBHelper(context);
@@ -75,8 +77,10 @@ public class EventDAO {
 		values.put(DBHelper.EVENT_START_DATE_TIME, event.startTimeDate);
 		values.put(DBHelper.EVENT_NAME, event.name);
 		values.put(DBHelper.EVENT_DESCRIPTION, event.description);
-		database.update(DBHelper.EVENT_TABLE, values, DBHelper.EVENT_ID + " = "
-				+ event.id, null);
+		int noOfRowsAffected = database.update(DBHelper.EVENT_TABLE, values,
+				DBHelper.EVENT_ID + " = " + event.id, null);
+
+		Log.e(TAG, "No of events affected on update  is  : " + noOfRowsAffected);
 		return event;
 	}
 
@@ -84,6 +88,10 @@ public class EventDAO {
 		long id = event.id;
 		database.delete(DBHelper.EVENT_TABLE, DBHelper.EVENT_ID + " = " + id,
 				null);
+		// should also delete from the Event_item table
+		database.delete(DBHelper.EVENT_ITEM_TABLE, DBHelper.EVENT_ID + " = "
+				+ id, null);
+
 	}
 
 	public List<Event> getAll() {

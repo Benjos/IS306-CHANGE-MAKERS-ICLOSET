@@ -45,7 +45,7 @@ public class EditEventActivity extends BaseActivity {
 	public Button buStartTime;
 	public Button buEndDate;
 	public Button buEndTime;
-
+	public Event event;
 	Calendar startDateTime;
 	Calendar endDateTime;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -56,7 +56,7 @@ public class EditEventActivity extends BaseActivity {
 		setContentView(R.layout.activity_create_event);
 
 		Intent intent = getIntent();
-		Event event = (Event) intent.getSerializableExtra("event");
+		event = (Event) intent.getSerializableExtra("event");
 
 		tvEventName = (TextView) findViewById(R.id.create_event_activity_event_name);
 		tvDescription = (TextView) findViewById(R.id.create_event_activity_description);
@@ -272,7 +272,6 @@ public class EditEventActivity extends BaseActivity {
 			eventDAO = new EventDAO(EditEventActivity.this);
 			eventDAO.open();
 
-			Event event = new Event();
 			event.name = eventName;
 			event.description = description;
 			event.startTimeDate = startDateTime;
@@ -298,6 +297,7 @@ public class EditEventActivity extends BaseActivity {
 						SelectItems.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				intent.putExtra("event", updatedEvent);
+				intent.putExtra(SelectItems.MODE, SelectItems.UPDATE);
 				startActivity(intent);
 			}
 
