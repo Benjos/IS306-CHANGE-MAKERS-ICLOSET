@@ -53,6 +53,10 @@
             android:name="com.example.icloset.SelectItems"
             android:label="@string/title_activity_select_items" >
         </activity>
+        <activity
+            android:name="com.example.icloset.Help"
+            android:label="@string/title_activity_help" >
+        </activity>
     </application>
 
 </manifest>

@@ -96,8 +96,11 @@ public class BaseActivity extends FragmentActivity {
 
 			break;
 		case R.id.action_settings:
-			Toast.makeText(this, " Settings is called", Toast.LENGTH_SHORT)
-					.show();
+			
+			Intent helpIntent = new Intent(this, Help.class);
+			helpIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(helpIntent);
+			
 			break;
 		default:
 			break;

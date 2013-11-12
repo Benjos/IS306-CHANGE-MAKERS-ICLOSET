@@ -285,9 +285,8 @@ public class GridViewFragment extends Fragment {
 				imageView
 						.setLayoutParams(new GridView.LayoutParams(size, size));
 				imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-				imageView.setPadding(10, 10, 10, 10);
-				imageView.setBackgroundColor(getResources().getColor(
-						R.color.black));
+				imageView.setPadding(20, 20, 20, 20);
+
 			} else {
 				imageView = (ImageView) convertView;
 			}
